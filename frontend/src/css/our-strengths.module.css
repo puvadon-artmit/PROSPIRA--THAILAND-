@@ -1,0 +1,64 @@
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animateFloat {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animateFadeIn {
+  animation: fade-in 1s ease-out;
+}
+
+.animateSlideUp {
+  animation: slide-up 0.8s ease-out;
+}
+
+.bgSize200 {
+  background-size: 200% 100%;
+}
+
+.bgPos0 {
+  background-position: 0% 50%;
+}
+
+.bgPos100Hover:hover {
+  background-position: 100% 50%;
+}
+
+.shineEffect {
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  transition: transform 1s;
+  background-image: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+.buttonHover:hover .shineEffect {
+  transform: translateX(100%);
+}
