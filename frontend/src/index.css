@@ -8,7 +8,9 @@ body {
 .navbar-dropdown {
   background-color: #08a4b8 !important; 
   border-radius: 8px; 
+  border: 2px solid #005f6b;
 }
+
 
 .navbar-dropdown .ant-menu-item,
 .navbar-dropdown .ant-menu-item a {

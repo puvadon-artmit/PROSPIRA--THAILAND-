@@ -5,9 +5,9 @@ import (
 	"backend/app/middlewares"
 	"backend/configs"
 	database "backend/external/db"
-	redisconfig "backend/external/redis"
+
+	// redisconfig "backend/external/redis"
 	"backend/internal/pkgs/logs"
-	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -31,13 +31,13 @@ func init() {
 	configs.Init()
 	logs.LogInit()
 	db = database.InitDataBase()
-	redisClient = redisconfig.ConnectRedis()
+	// redisClient = redisconfig.ConnectRedis()
 
-	pong, err := redisClient.Ping(context.Background()).Result()
-	if err != nil {
-		log.Fatalf("Could not connect to Redis: %v", err)
-	}
-	fmt.Println("Connected to Redis:", pong)
+	// pong, err := redisClient.Ping(context.Background()).Result()
+	// if err != nil {
+	// 	log.Fatalf("Could not connect to Redis: %v", err)
+	// }
+	// fmt.Println("Connected to Redis:", pong)
 }
 
 func main() {

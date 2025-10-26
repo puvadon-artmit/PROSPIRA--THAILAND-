@@ -30,7 +30,7 @@ func (h *UserHandler) LoginDBHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	token, err := h.UserSrv.SignIncookie(loginData)
+	token, err := h.UserSrv.SignIn(loginData)
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": err.Error(),
@@ -38,7 +38,7 @@ func (h *UserHandler) LoginDBHandler(c *fiber.Ctx) error {
 	}
 
 	c.Cookie(&fiber.Cookie{
-		Name:     "ACG_",
+		Name:     "PPR_",
 		Value:    token,
 		Expires:  time.Now().Add(time.Hour * 24),
 		HTTPOnly: true,
@@ -61,7 +61,7 @@ func (h *UserHandler) LoginHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	token, err := h.UserSrv.SignIncookie(loginData)
+	token, err := h.UserSrv.SignIn(loginData)
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": err.Error(),
@@ -76,7 +76,7 @@ func (h *UserHandler) LoginHandler(c *fiber.Ctx) error {
 
 func (h *UserHandler) LogoutDBHandler(c *fiber.Ctx) error {
 	c.Cookie(&fiber.Cookie{
-		Name:     "ACG_",
+		Name:     "PPR_",
 		Value:    "",
 		Expires:  time.Now().Add(-time.Hour),
 		HTTPOnly: true,

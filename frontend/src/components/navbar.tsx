@@ -137,6 +137,7 @@ const Navbar: React.FC = () => {
               </a>
             </Dropdown>
 
+
             <a
               href="/services"
               className={`relative px-4 py-2 transition-all duration-300 font-medium group ${
@@ -147,7 +148,16 @@ const Navbar: React.FC = () => {
             >
               <span className="relative z-10">บริการ</span>
             </a>
-
+            <a
+              href="/recruitment"
+              className={`relative px-4 py-2 transition-all duration-300 font-medium group ${
+                location.pathname === "/recruitment"
+                  ? "text-[#08a4b8]"
+                  : "text-black hover:text-[#08a4b8]"
+              }`}
+            >
+              <span className="relative z-10">ร่วมงานกับเรา</span>
+            </a>
             <a
               href="/contact"
               className="ml-4 px-6 py-3.5 bg-[#08a4b8] hover:bg-black text-white rounded-full font-medium hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-2"

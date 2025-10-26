@@ -68,7 +68,7 @@ func (s *userService) UpdateUserWithMapService(userID string, updates map[string
 	return s.userisrRepo.UpdateUserWithMap(userID, updates)
 }
 
-func (s *userService) SignIncookie(dto models.LoginCookieResp) (string, error) {
+func (s *userService) SignIn(dto models.LoginCookieResp) (string, error) {
 	user, err := s.userisrRepo.FindByUsername(dto.Username)
 	if err != nil {
 		return "", errors.New("ชื่อผู้ใช้ไม่ถูกต้อง")
