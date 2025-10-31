@@ -9,6 +9,7 @@ export default function Header() {
       <div className="absolute inset-0">
         <img src={banner} alt="Banner" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-l from-black/70 via-black/50 to-transparent"></div>
+        
       </div>
 
       <div className="relative z-10 h-full flex items-center justify-end">

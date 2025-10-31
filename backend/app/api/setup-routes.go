@@ -17,5 +17,7 @@ func SetupRoutes(app *fiber.App, db *gorm.DB) {
 	api.Mount("/user", routes.RoutesUser(db))
 	api.Mount("/meeting-room", routes.RoutesMeetingRoom(db))
 	api.Mount("/job-recruitment", routes.RoutesJobRecruitment(db))
-
+	api.Mount("/job-application", routes.RoutesJobApplication(db))
+	api.Mount("/dashboard", routes.RoutesDashboard(db))
+	api.Mount("/questionnaire", routes.RoutesQuestionnaire(db))
 }

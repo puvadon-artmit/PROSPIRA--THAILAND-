@@ -18,7 +18,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/redis/go-redis/v9"
 
-	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
 
@@ -67,7 +66,7 @@ func main() {
 		}
 	}()
 
-	err := app.Listen("0.0.0.0:" + viper.GetString("server.port"))
+	err := app.Listen("0.0.0.0:" + os.Getenv("SERVER_PORT"))
 	if err != nil {
 		log.Fatal(err)
 	}

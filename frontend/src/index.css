@@ -5,6 +5,16 @@ body {
   font-family: 'Kanit', sans-serif;
 }
 
+:root, html, body, #root,
+.ant, .ant-btn, .ant-modal, .ant-modal-content, .ant-modal-header, .ant-modal-title,
+.ant-dropdown, .ant-dropdown-menu, .ant-menu, .ant-menu-item,
+.ant-select-selector, .ant-select-selection-item, .ant-input, .ant-typography,
+.ant-form-item-label, .ant-checkbox-wrapper > label,
+.ant-upload, .ant-tag, .ant-tag-checkable, .ant-tag-checkable-checked, .ant-badge {
+  font-family: 'Kanit', sans-serif !important;
+}
+
+
 .navbar-dropdown {
   background-color: #08a4b8 !important; 
   border-radius: 8px; 
@@ -32,6 +42,10 @@ body {
 .ant-menu-item,
 .ant-select-selector,
 .ant-input,
+.ant-select-selection-item,
+.ant-select-selection-item:hover,
+.ant-select-selection-item:focus,
+.ant-select-selection-item:active,
 .ant-modal-content {
   font-family: 'Kanit', sans-serif !important;
 }

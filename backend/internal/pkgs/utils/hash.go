@@ -2,10 +2,10 @@ package utils
 
 import (
 	"backend/internal/core/domains"
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/spf13/viper"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -20,7 +20,7 @@ func Compare(password, hash string) bool {
 }
 
 func GenerateJwt(user domains.User) (string, error) {
-	var privateKey = viper.GetString("token.secret_key")
+	var privateKey = os.Getenv("TOKEN_SECRET_KEY")
 	claims := jwt.MapClaims{
 		"id":  user.UserID,
 		"exp": time.Now().Add(time.Hour * 10).Unix(),

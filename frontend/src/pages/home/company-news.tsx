@@ -58,11 +58,9 @@ export default function CompanyNews() {
           }}
         ></div>
 
-        {/* Decorative Lines */}
         <div className="absolute top-1/3 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-200/20 to-transparent"></div>
         <div className="absolute bottom-1/3 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-200/30 to-transparent"></div>
 
-        {/* Dots Pattern */}
         <div className="absolute top-10 right-10 grid grid-cols-4 gap-3 opacity-20">
           {[...Array(12)].map((_, i) => (
             <div
@@ -84,7 +82,6 @@ export default function CompanyNews() {
       </div>
 
       <div className="relative max-w-7xl mx-auto">
-        {/* Header Section */}
         <header className="mb-12 text-center">
           <h2 className="text-3xl md:text-5xl font-extrabold text-[#08a4b8]">
             ข่าวสารและประกาศ
@@ -96,7 +93,6 @@ export default function CompanyNews() {
         </header>
       </div>
 
-      {/* News Cards Grid */}
       <div className="grid md:grid-cols-3 gap-8">
         {newsItems.map((item, index) => (
           <div
@@ -104,10 +100,8 @@ export default function CompanyNews() {
             className="group relative bg-white/70 backdrop-blur-xl border border-white/60 rounded-3xl p-8 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden"
             style={{ animationDelay: `${index * 100}ms` }}
           >
-            {/* Gradient Overlay on Hover */}
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 via-blue-500/0 to-cyan-500/0 group-hover:from-cyan-500/5 group-hover:via-blue-500/5 group-hover:to-cyan-500/5 transition-all duration-500 rounded-3xl"></div>
 
-            {/* Animated Border Glow */}
             <div
               className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
               style={{
@@ -120,7 +114,6 @@ export default function CompanyNews() {
               }}
             ></div>
 
-            {/* New Badge */}
             {item.isNew && (
               <div className="absolute top-4 right-4 px-3 py-1 bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-xs font-bold rounded-full shadow-lg animate-pulse">
                 ใหม่
@@ -128,47 +121,38 @@ export default function CompanyNews() {
             )}
 
             <div className="relative z-10">
-              {/* Category Badge */}
               <div className="inline-block px-4 py-1 bg-gradient-to-r from-cyan-100 to-blue-100 text-cyan-700 text-xs font-semibold rounded-full mb-4">
                 {item.category}
               </div>
 
-              {/* Date with Icon */}
               <div className="flex items-center gap-2 text-sm text-gray-500 mb-4 group-hover:text-cyan-600 transition-colors duration-300">
                 <CalendarOutlined />
                 <span className="font-medium">{item.date}</span>
               </div>
 
-              {/* Title */}
               <h3 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-cyan-600 group-hover:to-blue-600 transition-all duration-300 leading-tight">
                 {item.title}
               </h3>
-
-              {/* Description */}
               <p className="text-gray-600 text-sm leading-relaxed mb-6">
                 {item.desc}
               </p>
 
-              {/* Read More Link */}
               <div className="flex items-center gap-2 text-cyan-600 font-semibold text-sm group-hover:gap-4 transition-all duration-300">
                 <span>อ่านเพิ่มเติม</span>
                 <RightOutlined className="group-hover:translate-x-1 transition-transform duration-300" />
               </div>
             </div>
 
-            {/* Bottom Accent Line */}
             <div className="absolute bottom-0 left-0 w-0 h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-cyan-400 group-hover:w-full transition-all duration-700 ease-out"></div>
           </div>
         ))}
       </div>
 
-      {/* CTA Button */}
       <div className="text-center mt-16">
         <a
           href="#"
           className="group inline-flex items-center gap-3 px-8 py-3 rounded-full bg-[#08a4b8] text-white font-bold text-lg shadow-2xl hover:shadow-[#08a4b8]/50 hover:scale-105 transition-all duration-500 relative overflow-hidden"
         >
-          {/* Shine Effect */}
           <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
 
           <span className="relative z-10">ดูข่าวทั้งหมด</span>

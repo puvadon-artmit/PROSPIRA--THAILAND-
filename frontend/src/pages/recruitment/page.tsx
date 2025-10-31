@@ -1,26 +1,24 @@
 import { useMemo, useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, Tag, Collapse, Typography, Divider, Badge, Input, Spin, Alert } from 'antd';
+import { Tag, Collapse, Typography, Divider, Badge, Spin } from 'antd';
 import {
   EnvironmentOutlined,
   ClockCircleOutlined,
   DollarOutlined,
-  SendOutlined,
   FireOutlined,
   ClearOutlined,
 } from '@ant-design/icons';
 import Header from './header';
-import Footer from './Footer';
+import Footer from './footer';
 import type { Job } from '../../types/job';
+import JobApplyButton from './job-apply-button';
 
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
 const { CheckableTag } = Tag;
-const { Search } = Input;
 
 
 export default function JobRecruitment() {
-
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -94,10 +92,6 @@ export default function JobRecruitment() {
     });
   }, [jobs, selectedDept, selectedLocation, selectedType, query]);
 
-  const handleApply = (jobTitle: string) => {
-    window.alert(`ขอบคุณที่สนใจสมัครตำแหน่ง ${jobTitle}!\nกรุณาส่งเรซูเม่มาที่ HR@prospira.co.th`);
-  };
-
   const resetFilters = () => {
     setSelectedDept(null);
     setSelectedType(null);
@@ -117,9 +111,8 @@ export default function JobRecruitment() {
                   key={d}
                   checked={selectedDept === d}
                   onChange={(checked) => setSelectedDept(checked ? d : null)}
-                  className={`cursor-pointer whitespace-nowrap border border-gray-300 rounded-md px-3 py-1 hover:bg-[#08a4b8]/10 ${
-                    selectedDept === d ? 'bg-[#08a4b8] rounded-full text-white border-[#08a4b8]' : ''
-                  }`}
+                  className={`cursor-pointer whitespace-nowrap border border-gray-300 rounded-md px-3 py-1 hover:bg-[#08a4b8]/10 ${selectedDept === d ? 'bg-[#08a4b8] rounded-full text-white border-[#08a4b8]' : ''
+                    }`}
                 >
                   {d}
                 </CheckableTag>
@@ -130,9 +123,8 @@ export default function JobRecruitment() {
                   key={t}
                   checked={selectedType === t}
                   onChange={(checked) => setSelectedType(checked ? t : null)}
-                  className={`cursor-pointer whitespace-nowrap border border-gray-300 rounded-md px-3 py-1 hover:bg-[#08a4b8]/10 ${
-                    selectedType === t ? 'bg-[#08a4b8] rounded-full text-white border-[#08a4b8]' : ''
-                  }`}
+                  className={`cursor-pointer whitespace-nowrap border border-gray-300 rounded-md px-3 py-1 hover:bg-[#08a4b8]/10 ${selectedType === t ? 'bg-[#08a4b8] rounded-full text-white border-[#08a4b8]' : ''
+                    }`}
                 >
                   {t}
                 </CheckableTag>
@@ -148,25 +140,48 @@ export default function JobRecruitment() {
             </div>
 
             <div className="w-full md:w-1/2 mt-4">
-              <Search
-                placeholder="ค้นหาตำแหน่งหรือคุณสมบัติ..."
-                allowClear
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onSearch={(value) => setQuery(value)}
-                enterButton
-              />
+              <div className="relative w-full group">
+                <input
+                  type="text"
+                  placeholder="ค้นหาตำแหน่งหรือคุณสมบัติ..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  className="w-full px-5 py-3.5 pl-12 pr-12 bg-gradient-to-r from-white to-gray-50 backdrop-blur-sm border border-gray-300 rounded-2xl text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#08a4b8] focus:ring-4 focus:ring-[#08a4b8]/20 focus:shadow-xl transition-all shadow-lg"
+                />
+
+                <svg
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#08a4b8] group-focus-within:scale-110 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+
+                {query && (
+                  <button
+                    onClick={() => setQuery('')}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
             </div>
           </div>
 
           <div className="flex items-center gap-3 flex-wrap">
             <Badge count={filteredJobs.filter((j) => j.hot).length} offset={[-4, 0]}>
-              <div className="relative px-3 py-1.5 bg-white/10 backdrop-blur-md border border-gray-400/20 rounded-xl shadow-lg text-sm font-medium text-[#08a4b8]">
-                ตำแหน่งด่วน
+              <div className="relative px-4 py-2 bg-gradient-to-r from-[#08a4b8] to-[#0bc9e0] rounded-xl shadow-xl text-sm font-bold text-white border-2 border-[#08a4b8]/30 hover:scale-105 transition-transform overflow-hidden">
+                <div className="relative z-10 flex items-center gap-2">
+                  ตำแหน่งด่วน
+                </div>
+                <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-[#08a4b8] to-[#0bc9e0] blur opacity-30"></div>
               </div>
             </Badge>
-            <div className="px-3 py-1.5 bg-white/10 backdrop-blur-md border border-gray-400/20 rounded-xl shadow-lg text-sm font-medium text-gray-800">
-              รวม {filteredJobs.length} รายการ
+            <div className="px-3 py-1.5 bg-gray-900 backdrop-blur-md border border-gray-700 rounded-xl shadow-lg text-sm font-medium text-white">
+              รวม {filteredJobs.length} ตำแหน่ง
             </div>
           </div>
         </div>
@@ -179,11 +194,13 @@ export default function JobRecruitment() {
           </div>
         )}
 
+
         {error && (
-          <div className="py-4">
-            <Alert message="เกิดข้อผิดพลาด" description={error} type="error" showIcon />
+          <div className="text-center py-10 text-gray-600 text-lg font-medium">
+            ยังไม่เปิดรับสมัครงานในขณะนี้
           </div>
         )}
+
 
         {!loading && !error && (
           <Collapse expandIconPosition="end" ghost className="space-y-4">
@@ -257,8 +274,8 @@ export default function JobRecruitment() {
                   <div className="relative p-4 rounded-xl bg-white/10 backdrop-blur-md border border-gray-400/20 shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#08a4b8] to-cyan-400 rounded-t-xl pointer-events-none"></div>
                     <div className="relative">
-                      <h5 className="text-[#08a4b8] font-semibold mb-2 text-[16px]">รายละเอียดงาน</h5>
-                      <p className="text-gray-800 text-sm leading-relaxed">{job.description}</p>
+                      <Title level={4} className="text-[#08a4b8] font-semibold mb-2 text-[18px]">รายละเอียดงาน</Title>
+                      <Text className="text-gray-800 text-[16px] leading-relaxed">{job.description}</Text>
                     </div>
                   </div>
 
@@ -267,8 +284,8 @@ export default function JobRecruitment() {
                   <div className="relative p-4 rounded-xl bg-white/10 backdrop-blur-md border border-gray-400/20 shadow-lg overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#08a4b8] to-cyan-400 rounded-t-xl pointer-events-none"></div>
                     <div className="relative">
-                      <h5 className="text-[#08a4b8] font-semibold mb-3 text-[16px]">✨ คุณสมบัติที่ต้องการ</h5>
-                      <div className="space-y-3">
+                      <Title level={4} className="text-[#08a4b8] font-semibold text-[18px] mb-6">✨ คุณสมบัติที่ต้องการ</Title>
+                      <div className="space-y-3 mt-4">
                         {job.requirements.map((req, index) => (
                           <div
                             key={index}
@@ -277,7 +294,7 @@ export default function JobRecruitment() {
                             <div className="flex-shrink-0 w-7 h-7 rounded-full bg-gradient-to-r from-[#08a4b8]/80 to-cyan-500/80 flex items-center justify-center text-black font-bold mr-3">
                               {index + 1}
                             </div>
-                            <span className="text-gray-800 text-sm leading-relaxed">{req}</span>
+                            <Title level={5} className="text-gray-800 text-[6px] leading-relaxed">{req}</Title>
                           </div>
                         ))}
                       </div>
@@ -285,21 +302,7 @@ export default function JobRecruitment() {
                   </div>
 
                   <div style={{ paddingTop: '12px', textAlign: 'center' }}>
-                    <Button
-                      type="primary"
-                      size="large"
-                      icon={<SendOutlined />}
-                      onClick={() => handleApply(job.title)}
-                      className="h-12 px-6 text-base font-semibold"
-                      style={{
-                        background: 'linear-gradient(135deg, #08a4b8 0%, #06b6d4 100%)',
-                        border: 'none',
-                        borderRadius: '10px',
-                        boxShadow: '0 8px 18px rgba(8,164,184,0.35)',
-                      }}
-                    >
-                      ส่งใบสมัครงาน
-                    </Button>
+                    <JobApplyButton job={job} />
                   </div>
                 </div>
               </Panel>

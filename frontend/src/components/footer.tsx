@@ -1,8 +1,8 @@
 import logo from "../images/logo_footer.svg";
 import { InstagramOutlined, FacebookOutlined, TwitterOutlined, } from "@ant-design/icons";
+import "../css/star-animation.css"
 
 export default function Footer() {
-  // Generate random stars
   const stars = Array.from({ length: 100 }, (_, i) => ({
     id: i,
     top: Math.random() * 100,
@@ -14,11 +14,9 @@ export default function Footer() {
 
   return (
     <footer className="bg-black text-gray-300 relative overflow-hidden">
-      {/* Animated Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-90"></div>
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#08a4b8] to-transparent"></div>
       
-      {/* Galaxy Stars */}
       <div className="absolute inset-0">
         {stars.map((star) => (
           <div
@@ -37,20 +35,12 @@ export default function Footer() {
         ))}
       </div>
 
-      {/* Decorative Elements */}
       <div className="absolute top-20 right-10 w-64 h-64 bg-[#08a4b8] rounded-full opacity-5 blur-3xl"></div>
       <div className="absolute bottom-10 left-10 w-96 h-96 bg-[#08a4b8] rounded-full opacity-5 blur-3xl"></div>
 
-      {/* CSS Animation */}
-      <style>{`
-        @keyframes twinkle {
-          0%, 100% { opacity: 0.2; transform: scale(1); }
-          50% { opacity: 1; transform: scale(1.2); }
-        }
-      `}</style>
+
 
       <div className="max-w-7xl mx-auto px-6 py-16 relative z-10">
-        {/* Top Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* About */}
           <div className="space-y-4">
@@ -63,7 +53,6 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Company Info */}
           <div>
             <h4 className="text-white font-bold mb-6 text-lg relative inline-block">
               ข้อมูลบริษัท
@@ -81,7 +70,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Products */}
           <div>
             <h4 className="text-white font-bold mb-6 text-lg relative inline-block">
               ผลิตภัณฑ์
@@ -95,7 +83,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact */}
           <div>
             <h4 className="text-white font-bold mb-6 text-lg relative inline-block">
               ติดต่อเรา
@@ -108,7 +95,6 @@ export default function Footer() {
               <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">นโยบายความเป็นส่วนตัว</a></li>
             </ul>
 
-            {/* Social Icons */}
             <div className="flex items-center gap-3 mt-4">
               <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[#08a4b8] hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-[#08a4b8]/50">
                 <FacebookOutlined className="text-lg" />
@@ -123,8 +109,6 @@ export default function Footer() {
             </div>
           </div>
         </div>
-
-        {/* Bottom */}
         <div className="mt-16 border-t border-gray-800 pt-8 text-center">
           <p className="text-gray-500 text-sm">
             © {new Date().getFullYear()} <span className="text-[#08a4b8] font-semibold">PROSPIRA CORPORATION</span>. สงวนลิขสิทธิ์ทุกประการ
@@ -132,7 +116,6 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Bottom Gradient Line */}
       <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#08a4b8] to-transparent opacity-50"></div>
     </footer>
   );
