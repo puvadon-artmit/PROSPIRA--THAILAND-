@@ -9,9 +9,19 @@ services:
     image: api-prospira-website:latest
     volumes:
       - prospira-website-volumn:/app/private
+<<<<<<< Updated upstream
+    container_name: api-prospira-website
+    ports:
+      - "7777:7777"
     env_file:
       - .env    
-    restart: always   
+    restart: unless-stopped
+=======
+    env_file:
+      - .env    
+    restart: always
+>>>>>>> Stashed changes
+
     environment:
       - DB_POSTGRES_USER=webapprove
       - DB_POSTGRES_PASSWORD=Psth@2024**
@@ -31,8 +41,11 @@ services:
       interval: 30s
       timeout: 3s
       retries: 3
+<<<<<<< Updated upstream
+=======
     networks : 
       - prospira-website-network
+>>>>>>> Stashed changes
   nginx-external-site:
     image: nginx:latest
     volumes:
