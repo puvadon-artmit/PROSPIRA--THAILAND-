@@ -9,39 +9,42 @@ import (
 
 var NewCorsMiddleware = cors.New(cors.Config{
 	AllowOrigins: strings.Join([]string{
+		// local dev
 		"http://localhost:3000",
-		"http://localhost:5173",
-		"http://10.0.98.208:13002",
-		"http://10.0.98.208",
-		"http://10.0.98.208:5757",
 		"http://localhost:3001",
+		"http://localhost:5173",
 		"http://localhost:13002",
+
+		// IP/port ภายใน
+		"http://10.0.98.208",
+		"http://10.0.98.208:13002",
+		"http://10.0.98.208:5757",
+
+		// โดเมนจริง (ไม่มี path)
 		"http://external.psth.com",
-		"http://external.psth.com/en",
-		"http://external.psth.com/th",
+		"https://external.psth.com",
 		"http://prospira.th.com",
-		"http://prospira.th.com/th",
-		"http://prospira.th.com/en",
+		"https://prospira.th.com",
 		"http://10.144.1.103",
-		"http://10.144.1.103/en",
-		"http://10.144.1.103/th",
 	}, ","),
+
 	AllowMethods: strings.Join([]string{
 		fiber.MethodGet,
 		fiber.MethodPost,
-		fiber.MethodHead,
 		fiber.MethodPut,
-		fiber.MethodDelete,
 		fiber.MethodPatch,
+		fiber.MethodDelete,
+		fiber.MethodHead,
+		fiber.MethodOptions,
 	}, ","),
+
 	AllowHeaders: strings.Join([]string{
+		"Origin",
 		"Content-Type",
+		"Accept",
 		"Authorization",
-		"X-Frame-Options",
-		"Access-Control-Allow-Origin",
-		"Access-Control-Allow-Headers",
+		"X-Requested-With",
 	}, ","),
+
 	AllowCredentials: true,
-	ExposeHeaders:    "",
-	MaxAge:           0,
 })

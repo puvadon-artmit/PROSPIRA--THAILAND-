@@ -47,7 +47,7 @@ services:
 
 volumes:
   prospira-website-volumn:
-    driver: local
+    driver: uploads
 networks:
   prospira-website-network:
     driver: bridge
