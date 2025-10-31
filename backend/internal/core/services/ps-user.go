@@ -10,11 +10,11 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
-	"github.com/spf13/viper"
 )
 
 type userService struct {
@@ -86,7 +86,7 @@ func (s *userService) SignIn(dto models.LoginCookieResp) (string, error) {
 		return "", errors.New("รหัสผ่านไม่ถูกต้อง")
 	}
 
-	jwtSecretKey := []byte(viper.GetString("token.secret_key"))
+	jwtSecretKey := []byte(os.Getenv("TOKEN_SECRET_KEY"))
 	claims := jwt.MapClaims{
 		"user_id":   user.UserID,
 		"username":  user.Username,
@@ -123,15 +123,15 @@ func (s *userService) GetProfileByCookieId(userID string) (models.UserReq, error
 	}
 
 	// เตรียมข้อมูล RoleName
-	var roleInfoList []models.RoleInfo
-	for _, role := range user.Role {
-		roleInfo := models.RoleInfo{
-			Name:        role.RoleName,
-			Description: role.RoleDescription,
-		}
-		roleInfoList = append(roleInfoList, roleInfo)
-	}
-	userReq.RoleName = roleInfoList
+	// var roleInfoList []models.RoleInfo
+	// for _, role := range user.Role {
+	// 	roleInfo := models.RoleInfo{
+	// 		Name:        role.RoleName,
+	// 		Description: role.RoleDescription,
+	// 	}
+	// 	roleInfoList = append(roleInfoList, roleInfo)
+	// }
+	// userReq.RoleName = roleInfoList
 
 	return userReq, nil
 }
@@ -155,14 +155,14 @@ func (s *userService) GetUserByID(userID string) (models.UserAdminReq, error) {
 	}
 
 	// เตรียมข้อมูล RoleName
-	var roleInfoList []models.RoleInfo
-	for _, role := range user.Role {
-		roleInfo := models.RoleInfo{
-			Name: role.RoleName,
-		}
-		roleInfoList = append(roleInfoList, roleInfo)
-	}
-	userReq.RoleName = roleInfoList
+	// var roleInfoList []models.RoleInfo
+	// for _, role := range user.Role {
+	// 	roleInfo := models.RoleInfo{
+	// 		Name: role.RoleName,
+	// 	}
+	// 	roleInfoList = append(roleInfoList, roleInfo)
+	// }
+	// userReq.RoleName = roleInfoList
 
 	return userReq, nil
 }

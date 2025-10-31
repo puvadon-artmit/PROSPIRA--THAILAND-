@@ -13,9 +13,9 @@ type JobRecruitmentRepositoryDB struct {
 }
 
 func NewJobRecruitmentRepositoryDB(db *gorm.DB) ports.JobRecruitmentRepository {
-	if err := db.AutoMigrate(&domains.JobRecruitment{}); err != nil {
-		fmt.Printf("failed to auto migrate: %v", err)
-	}
+	// if err := db.AutoMigrate(&domains.JobRecruitment{}); err != nil {
+	// 	fmt.Printf("failed to auto migrate: %v", err)
+	// }
 	return &JobRecruitmentRepositoryDB{db: db}
 }
 

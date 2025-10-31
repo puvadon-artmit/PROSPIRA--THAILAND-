@@ -134,7 +134,6 @@ func (h *UserHandler) GetProfileCookie(c *fiber.Ctx) error {
 }
 
 func (h *UserHandler) GetProfileHandler(c *fiber.Ctx) error {
-	// ดึง token จาก header "Authorization: Bearer <token>"
 	authHeader := c.Get("Authorization")
 	if authHeader == "" {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
@@ -151,7 +150,6 @@ func (h *UserHandler) GetProfileHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	// ตรวจสอบ JWT
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("invalid token")
@@ -165,7 +163,6 @@ func (h *UserHandler) GetProfileHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	// ดึงข้อมูล claims
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
@@ -175,7 +172,6 @@ func (h *UserHandler) GetProfileHandler(c *fiber.Ctx) error {
 
 	userID := claims["user_id"].(string)
 
-	// เรียก service เพื่อดึงข้อมูลผู้ใช้
 	result, err := h.UserSrv.GetProfileByCookieId(userID)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{

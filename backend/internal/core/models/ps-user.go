@@ -16,12 +16,12 @@ type RoleInfo struct {
 }
 
 type UserReq struct {
-	Firstname string     `json:"firstname"`
-	Lastname  string     `json:"lastname"`
-	Username  string     `json:"username"`
-	Email     string     `json:"email"`
-	Status    string     `json:"status"`
-	RoleName  []RoleInfo `json:"role"`
+	Firstname string `json:"firstname"`
+	Lastname  string `json:"lastname"`
+	Username  string `json:"username"`
+	Email     string `json:"email"`
+	Status    string `json:"status"`
+	// RoleName  []RoleInfo `json:"role"`
 }
 
 type UserAdminReq struct {

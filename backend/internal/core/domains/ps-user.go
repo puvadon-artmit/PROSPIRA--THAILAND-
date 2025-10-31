@@ -17,7 +17,7 @@ type User struct {
 	CreatedAt *time.Time     `json:"created_at"`
 	UpdatedAt *time.Time     `json:"updated_at"`
 	DeletedAt gorm.DeletedAt `gorm:"index"`
-	Role      []Role         `gorm:"many2many:user_role"`
+	// Role      []Role         `gorm:"many2many:user_role"`
 }
 
 type Role struct {

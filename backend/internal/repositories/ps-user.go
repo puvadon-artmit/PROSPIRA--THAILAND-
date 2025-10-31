@@ -13,9 +13,9 @@ type UserRepositoryDB struct {
 }
 
 func NewUserRepositoryDB(db *gorm.DB) ports.UserRepository {
-	// if err := db.AutoMigrate(&domains.Role{}); err != nil {
-	// 	fmt.Printf("failed to auto migrate: %v", err)
-	// }
+	if err := db.AutoMigrate(&domains.User{}); err != nil {
+		fmt.Printf("failed to auto migrate: %v", err)
+	}
 	return &UserRepositoryDB{db: db}
 }
 
@@ -41,7 +41,7 @@ func (r *UserRepositoryDB) FindByUsername(username string) (*domains.User, error
 
 func (r *UserRepositoryDB) GetUserByID(userID string) (domains.User, error) {
 	var user domains.User
-	if err := r.db.Preload("Role").Where("user_id = ?", userID).First(&user).Error; err != nil {
+	if err := r.db.Where("user_id = ?", userID).First(&user).Error; err != nil {
 		return domains.User{}, err
 	}
 	return user, nil
