@@ -8,7 +8,9 @@ services:
         MAIN_PKG: .           
     image: api-prospira-website:latest
     volumes:
-      - prospira-website-volumn:/app/private
+      - ./uploads/resumes:/app/private/uploads/resumes:rw
+      - ./uploads/appeals:/app/private/uploads/appeals:rw
+      - ./uploads/images:/app/private/uploads/images:rw
     env_file:
       - .env    
     restart: always   
@@ -27,7 +29,7 @@ services:
       - SMTP_SET_FROM=test-service@prospira.com
       - PORT=7777
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:7777/healthz", "http://external.psth.com/en", "http://external.psth.com/th"]
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:7777/healthz || exit 1"]
       interval: 30s
       timeout: 3s
       retries: 3
@@ -47,7 +49,7 @@ services:
 
 volumes:
   prospira-website-volumn:
-    driver: uploads
+    driver: local
 networks:
   prospira-website-network:
     driver: bridge
