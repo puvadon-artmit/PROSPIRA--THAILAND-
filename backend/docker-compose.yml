@@ -8,9 +8,9 @@ services:
         MAIN_PKG: .           
     image: api-prospira-website:latest
     volumes:
-      - ./uploads/resumes:/app/private/uploads/resumes:rw
-      - ./uploads/appeals:/app/private/uploads/appeals:rw
-      - ./uploads/images:/app/private/uploads/images:rw
+      - ./uploads/resumes:/app/uploads/resumes
+      - ./uploads/appeals:/app/uploads/appeals
+      - ./uploads/images:/app/uploads/images
     env_file:
       - .env    
     restart: always   
