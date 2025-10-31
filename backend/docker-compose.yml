@@ -9,13 +9,9 @@ services:
     image: api-prospira-website:latest
     volumes:
       - prospira-website-volumn:/app/private
-    container_name: api-prospira-website
-    ports:
-      - "7777:7777"
     env_file:
       - .env    
-    restart: unless-stopped
-
+    restart: always   
     environment:
       - DB_POSTGRES_USER=webapprove
       - DB_POSTGRES_PASSWORD=Psth@2024**
@@ -35,6 +31,8 @@ services:
       interval: 30s
       timeout: 3s
       retries: 3
+    networks : 
+      - prospira-website-network
   nginx-external-site:
     image: nginx:latest
     volumes:

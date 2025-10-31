@@ -1,17 +1,37 @@
-FROM golang:alpine AS builder
-WORKDIR /go/src
-COPY . .
-RUN go get
-RUN go build -o /go/bin/backend_api
+# Start from a Go image
+FROM golang:1.24.3-alpine
 
-FROM alpine:3.20 AS final
-RUN apk add --no-cache tzdata ca-certificates \
-  && addgroup -S app && adduser -S app -G app
-
+# Setup Work Directory
 WORKDIR /app
-COPY --from=builder /go/bin/backend_api /app/backend_api
 
-ENV TZ="Asia/Bangkok"
-EXPOSE 7777
-USER app
-ENTRYPOINT ["/app/backend_api"]
+# Copy Go modules and install dependencies
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copy the rest of the application code
+COPY . .
+
+# Build the Go application
+RUN go build -o golangexternalweb .
+
+# Expose the port your app will run on
+EXPOSE ${PORT}
+
+ENV SMTP_HOST=10.145.0.250
+ENV SMTP_USERNAME=it-system@prospira-th.com
+ENV SMTP_PASSWORD=Psth@min135
+ENV SMTP_PORT=25
+ENV SMTP_SET_FROM=test-service@prospira.com
+
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=Prospira@2025!
+ENV POSTGRES_DB=prospira-website
+ENV POSTGRES_HOST=10.144.1.104
+ENV POSTGRES_PORT=5432
+ENV SERVER_PORT=7777
+ENV TOKEN_SECRET_KEY=1844cb55cd2b085135a1297c87196e46337b191710c96eadf2a2897e2b1cb8ce
+ENV SENDGRID_API_KEY=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
+
+
+# Run the application
+CMD ["./golangexternalweb"]
