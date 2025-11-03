@@ -31,7 +31,6 @@ export default function NavbarAdmin() {
             Authorization: `Bearer ${token}`,
           },
         });
-
         if (resp.data && resp.data.result) {
           setUser(resp.data.result as UserProfile);
         } else {
@@ -146,7 +145,7 @@ export default function NavbarAdmin() {
                   </svg>
                 </div>
               </div>
-            </Dropdown> 
+            </Dropdown>
           )}
         </div>
       </div>

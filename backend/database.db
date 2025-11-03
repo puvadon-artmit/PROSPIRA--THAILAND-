@@ -1,7 +1,0 @@
-docker run -d \
-  --name prospira-db \
-  -e POSTGRES_USER=prospira-dev \
-  -e POSTGRES_PASSWORD=prospira12345678 \
-  -e POSTGRES_DB=prospira-dev \
-  -p 5432:5432 \
-  postgres:16

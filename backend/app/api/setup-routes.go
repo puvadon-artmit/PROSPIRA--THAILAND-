@@ -21,4 +21,5 @@ func SetupRoutes(app *fiber.App, db *gorm.DB) {
 	api.Mount("/dashboard", routes.RoutesDashboard(db))
 	api.Mount("/questionnaire", routes.RoutesQuestionnaire(db))
 	api.Mount("/uploads", routes.RoutesUpload())
+	api.Mount("/company-news", routes.RoutesCompanyNews(db))
 }

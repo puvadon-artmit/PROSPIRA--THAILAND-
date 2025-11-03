@@ -1,17 +1,26 @@
-import banner from "../../images/banner-gardx.jpg";
 import styles from "../../css/home.module.css";
 import logo from "../../images/logo_footer.svg";
 import { RightOutlined } from "@ant-design/icons";
+import bannerVideo from "/kling_20251031_Image_to_Video_Create_a_h_4577_0.mp4";
 
 export default function Header() {
   return (
     <div className="relative w-full h-screen overflow-hidden">
+      {/* 🔹 พื้นหลังเป็นวิดีโอ */}
       <div className="absolute inset-0">
-        <img src={banner} alt="Banner" className="w-full h-full object-cover" />
+        <video
+          className="w-full h-full object-cover"
+          src={bannerVideo}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          poster="/fallback.jpg" 
+        />
         <div className="absolute inset-0 bg-gradient-to-l from-black/70 via-black/50 to-transparent"></div>
-        
       </div>
-
+      
       <div className="relative z-10 h-full flex items-center justify-end">
         <div className="max-w-7xl sm:mx-auto lg:mx-[-6rem] px-4 sm:px-6 lg:px-0 w-full">
           <div className="max-w-3xl space-y-8 animate-fadeIn ml-auto">
@@ -34,12 +43,11 @@ export default function Header() {
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   เรียนรู้เพิ่มเติม
-                   <RightOutlined className="group-hover:translate-x-1 transition-transform duration-300" />
+                  <RightOutlined className="group-hover:translate-x-1 transition-transform duration-300" />
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-[#70e3f2] via-[#5ccfde] to-[#44c9da] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </a>
             </div>
-            
           </div>
         </div>
       </div>

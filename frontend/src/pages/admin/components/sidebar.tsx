@@ -30,6 +30,7 @@ type SidebarProps = {
   fit?: "viewport" | "content";
   autoCollapseBelow?: number;
   className?: string;
+  onLogout?: () => void;
 };
 
 export default function Sidebar({

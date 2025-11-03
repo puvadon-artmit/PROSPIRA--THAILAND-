@@ -5,6 +5,8 @@ import OurStrengths from "./our-strengths";
 import ProductInformation from "./product-information";
 import CompanyNews from "./company-news";
 import Footer from "../../components/footer";
+import SafetyFirst from "./safety-first";
+import CreatingCustomer from "./creating-customer";
 
 export default function HomePage() {
   return (
@@ -14,8 +16,10 @@ export default function HomePage() {
       <CompanyInformation />
       <OurStrengths />
       <ProductInformation />
-       <CompanyNews />
-       <Footer />
+      <SafetyFirst />
+      <CreatingCustomer />
+      <CompanyNews />
+      <Footer />
     </div>
   );
 }

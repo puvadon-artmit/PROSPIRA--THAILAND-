@@ -8,6 +8,7 @@ import mainProducts from "../../images/main-products.jpeg";
 import product1 from "../../images/product/product1.jpg";
 import product2 from "../../images/product/product2.jpg";
 import product3 from "../../images/product/product3.jpg";
+import { useLocation } from "react-router-dom";
 
 interface FeatureBadgeProps {
   icon: React.ElementType;
@@ -38,6 +39,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   gradient,
   index,
 }) => {
+
   return (
     <div
       className="group relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100"
@@ -102,30 +104,32 @@ const ProductCard: React.FC<ProductCardProps> = ({
   );
 };
 
-export default function ProductInformation() {
+export default function ProductInformation() { 
+  const location = useLocation();
+  const lang = location.pathname.split("/")[1];
   const products = [
     {
       image: product1,
       title: "ชิ้นส่วนยานยนต์",
       description:
         "ผลิตภัณฑ์ยางกันสั่นสำหรับรถยนต์ที่ผลิตจากเทคโนโลยี樹脂加工 (การประมวลผลเรซิน) เหมาะสำหรับการใช้งานเช่น แท่นยึดเครื่องยนต์ (Engine Mount) และส่วนประกอบอื่น ๆ ที่ช่วยเพิ่มความนุ่มนวลและลดแรงสั่นสะเทือนในรถยนต์",
-      link: "/products/automotive",
+      link: `${lang}/product/rubber`,
       gradient: "from-blue-500 to-cyan-400",
     },
     {
       image: product2,
-      title: "ผลิตภัณฑ์อุตสาหกรรม",
+      title: "แอร์สปริง (Air Spring",
       description:
-        "ยางกันสั่นสำหรับงานอุตสาหกรรม ผลิตจากยางคุณภาพสูงและออกแบบอย่างเหมาะสม บนไลน์มาตรฐานที่ช่วยลดต้นทุนและลดระยะเวลาในการผลิตเมื่อเทียบกับการออกแบบใหม่แบบเฉพาะราย",
-      link: "/products/industrial",
+        "แอร์สปริงคือชิ้นงานรูปทรงกระบอกที่ประกอบด้วยยางและผ้า ภายในบรรจุอากาศอัด ตัวเบลโลวส์เองไม่รับน้ำหนักโดยตรง แต่แรงดันอากาศภายในทำหน้าที่รองรับแรงและน้ำหนัก",
+       link: `${lang}/product/air-spring`,
       gradient: "from-emerald-500 to-teal-400",
     },
     {
       image: product3,
-      title: "แอร์สปริง (Air Spring)",
+      title: "Pneumatic Chuck",
       description:
-        "แอร์สปริงคือชิ้นงานรูปทรงกระบอกที่ประกอบด้วยยางและผ้า ภายในบรรจุอากาศอัด ตัวเบลโลวส์เองไม่รับน้ำหนักโดยตรง แต่แรงดันอากาศภายในทำหน้าที่รองรับแรงและน้ำหนัก",
-      link: "/products/airspring",
+        "Pneumatic Chuck หรือ ชิ้นส่วนยึดเครื่องยนต์ ใช้ลมอัดเป็นตัวกลางในการยึดเครื่องยนต์ ช่วยลดแรงสั่นสะเทือนและเพิ่มความนุ่มนวลในเครื่องยนต์",
+      link: `${lang}/product/pneumatic-chuck`,
       gradient: "from-purple-500 to-pink-400",
     },
   ];
@@ -212,7 +216,7 @@ export default function ProductInformation() {
             {/* CTA Buttons */}
             <div className="mt-8 flex flex-wrap gap-4">
               <a
-                href="/products/main"
+                href="/product/rubber"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#08a4b8] to-[#06c8df] text-white font-medium shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group"
               >
                 <span>ดูรายละเอียดผลิตภัณฑ์หลัก</span>

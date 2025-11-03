@@ -11,6 +11,7 @@ type JobApplication struct {
 	Note             string    `json:"note"`
 	Status           string    `json:"status"`
 	Position         string    `json:"position"`
+	UsernameCreator  string    `json:"username_creator"`
 	CreatedAt        time.Time `json:"created_at"`
 	UpdatedAt        time.Time `json:"updated_at"`
 }
