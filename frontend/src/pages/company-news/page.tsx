@@ -4,7 +4,7 @@ import { useSearchParams, useLocation } from "react-router-dom";
 import { buildImageURL } from "../../../utils/get-image";
 import { Link } from "react-router-dom";
 import type { NewsItemApi, RelatedNews } from "../../types/company-news";
-import { InstagramOutlined, FacebookOutlined, XOutlined } from "@ant-design/icons";
+// import { InstagramOutlined, FacebookOutlined, XOutlined } from "@ant-design/icons";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSanitize from "rehype-sanitize";
@@ -187,7 +187,7 @@ export default function CompanyNewsPage() {
                                             </ReactMarkdown>
 
                                     {/* Share */}
-                                    <div className="mt-8 sm:mt-10 lg:mt-12 pt-6 sm:pt-8 border-t border-gray-200">
+                                    {/* <div className="mt-8 sm:mt-10 lg:mt-12 pt-6 sm:pt-8 border-t border-gray-200">
                                         <p className="text-xs sm:text-sm font-medium text-gray-500 mb-2 sm:mb-3">
                                             แชร์บทความนี้
                                         </p>
@@ -213,7 +213,7 @@ export default function CompanyNewsPage() {
                                                 <XOutlined style={{ color: "white" }} className="text-base sm:text-lg" />
                                             </button>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </article>

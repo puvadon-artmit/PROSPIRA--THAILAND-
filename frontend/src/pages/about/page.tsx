@@ -1,10 +1,17 @@
 
-
+import Header from "./header";
+import Environmental from "./environmental";
+import Content from "./content";
+import Footer from "../../components/footer";
 
 export default function AboutPage() {
   return (
-    <div>
-         <h1 className="text-2xl font-bold">About Page</h1>
-    </div>
-  )
+    <section>
+      <Header />
+      <Content />
+      <Environmental />
+      <Footer />
+    </section>
+  );
 }
+

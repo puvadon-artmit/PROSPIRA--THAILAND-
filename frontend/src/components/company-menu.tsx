@@ -1,19 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { DownOutlined, RightOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
-
+import withLang from "../../utils/normalize-lang";
 
 type Item = { key: string; label: string; href: string; desc?: string };
-
-const core: Item[] = [
-  { key: "1", label: "เกี่ยวกับเรา", href: "/about", desc: "รู้จักตัวตนและค่านิยมของเรา" },
-  { key: "2", label: "ประวัติบริษัท", href: "/history", desc: "เส้นทางและเหตุการณ์สำคัญ" },
-];
-
-const vision: Item[] = [
-  { key: "3", label: "วิสัยทัศน์และพันธกิจ", href: "/vision", desc: "ทิศทางและเป้าหมายองค์กร" },
-  { key: "4", label: "ทีมงาน", href: "/team", desc: "ผู้คนเบื้องหลังความสำเร็จ" },
-];
 
 export default function CompanyMenu({ isCompanyPage, lang }: { isCompanyPage?: boolean, lang?: string }) {
   const [open, setOpen] = useState(false);
@@ -61,6 +51,16 @@ export default function CompanyMenu({ isCompanyPage, lang }: { isCompanyPage?: b
     clearTimers();
     leaveTimer.current = window.setTimeout(() => setOpen(false), 120);
   };
+
+    const core: Item[] = [
+    { key: "1", label: "เกี่ยวกับเรา", href: withLang(lang, "/about"), desc: "รู้จักตัวตนและค่านิยมของเรา" },
+    { key: "2", label: "ประวัติบริษัท", href: withLang(lang, "/history"), desc: "เส้นทางและเหตุการณ์สำคัญ" },
+  ];
+
+  const vision: Item[] = [
+    { key: "3", label: "วิสัยทัศน์และพันธกิจ", href: withLang(lang, "/vision"), desc: "ทิศทางและเป้าหมายองค์กร" },
+    { key: "4", label: "จุดแข็งของเรา", href: withLang(lang, "/our-strengths"), desc: "จุดแข็งของเรา" },
+  ];
 
   return (
     <div

@@ -97,20 +97,25 @@ func (r *CompanyNewsRepositoryDB) GetAllCompanyNews() ([]domains.CompanyNews, er
 	return list, nil
 }
 
-func (r *CompanyNewsRepositoryDB) GetCompanyNews(limit, offset int) ([]domains.CompanyNews, error) {
+func (r *CompanyNewsRepositoryDB) GetCompanyNews(limit, offset int) ([]domains.CompanyNews, int64, error) {
+	var total int64
+	const countQ = `SELECT COUNT(*) FROM company_news;`
+	if err := r.db.Raw(countQ).Scan(&total).Error; err != nil {
+		return nil, 0, err
+	}
 	const q = `
-		SELECT company_news_id, company_news_photo, title, content, category,
-		       username_creator, created_at, updated_at
-		FROM company_news
-		ORDER BY created_at DESC
-		LIMIT $1 OFFSET $2;
-	`
-
+        SELECT company_news_id, company_news_photo, title, content, category,
+               username_creator, created_at, updated_at
+        FROM company_news
+        ORDER BY created_at DESC
+        LIMIT $1 OFFSET $2;
+    `
 	var list []domains.CompanyNews
 	if err := r.db.Raw(q, limit, offset).Scan(&list).Error; err != nil {
-		return nil, err
+		return nil, 0, err
 	}
-	return list, nil
+
+	return list, total, nil
 }
 
 func (r *CompanyNewsRepositoryDB) UpdateCompanyNewsWithMap(companyNewsID string, updates map[string]interface{}) error {

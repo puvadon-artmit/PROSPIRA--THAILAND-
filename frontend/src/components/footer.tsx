@@ -1,8 +1,10 @@
 import logo from "../images/logo_footer.svg";
-import { InstagramOutlined, FacebookOutlined, TwitterOutlined, } from "@ant-design/icons";
+// import { InstagramOutlined, FacebookOutlined, TwitterOutlined, } from "@ant-design/icons";
 import "../css/star-animation.css"
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
+  const { t } = useTranslation();
   const stars = Array.from({ length: 100 }, (_, i) => ({
     id: i,
     top: Math.random() * 100,
@@ -48,70 +50,56 @@ export default function Footer() {
               <img src={logo} alt="PROSPIRA Logo" className="w-40 h-20" />
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
-              บริษัทผู้เชี่ยวชาญด้านผลิตภัณฑ์ยางกันสั่นสำหรับอุตสาหกรรมและยานยนต์  
-              ให้บริการด้วยเทคโนโลยีระดับโลก มุ่งเน้นคุณภาพและความพึงพอใจสูงสุดของลูกค้า
+              {t("about_desc")}
             </p>
           </div>
 
           <div>
             <h4 className="text-white font-bold mb-6 text-lg relative inline-block">
-              ข้อมูลบริษัท
+              {t("menu_company_info_title")}
               <span className="absolute bottom-0 left-0 w-12 h-0.5 bg-gradient-to-r from-[#08a4b8] to-transparent"></span>
             </h4>
             <ul className="space-y-3 text-gray-400 text-sm">
-              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">คำกล่าวจากประธานบริษัท</a></li>
-              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">นโยบายธุรกิจ</a></li>
-              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">ภาพรวมบริษัท</a></li>
-              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">ประวัติความเป็นมา</a></li>
-              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">สาขาและสำนักงาน</a></li>
-              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">บริษัทจำหน่ายในภูมิภาค</a></li>
-              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">ประกาศทางอิเล็กทรอนิกส์</a></li>
-              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">จุดแข็งของเรา</a></li>
+              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">{t("menu_company_info_1")}</a></li>
+              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">{t("menu_company_info_2")}</a></li>
+              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">{t("menu_company_info_3")}</a></li>
+              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">{t("menu_company_info_4")}</a></li>
+              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">{t("menu_company_info_5")}</a></li>
+              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">{t("menu_company_info_6")}</a></li>
+              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">{t("menu_company_info_7")}</a></li>
+              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">{t("menu_company_info_8")}</a></li>
             </ul>
           </div>
 
           <div>
             <h4 className="text-white font-bold mb-6 text-lg relative inline-block">
-              ผลิตภัณฑ์
+              {t("menu_products_title")}
               <span className="absolute bottom-0 left-0 w-12 h-0.5 bg-gradient-to-r from-[#08a4b8] to-transparent"></span>
             </h4>
             <ul className="space-y-3 text-gray-400 text-sm">
-              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">ยางกันสั่นสำหรับยานยนต์</a></li>
-              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">ยางกันสั่นสำหรับอุตสาหกรรม</a></li>
-              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">แอร์สปริง (Air Spring)</a></li>
-              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">แคลมป์แบบลม (Pneumatic Chuck)</a></li>
+              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">{t("menu_products_1")}</a></li>
+              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">{t("menu_products_2")}</a></li>
+              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">{t("menu_products_3")}</a></li>
+              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">{t("menu_products_4")}</a></li>
             </ul>
           </div>
 
           <div>
             <h4 className="text-white font-bold mb-6 text-lg relative inline-block">
-              ติดต่อเรา
+              {t("menu_contact_title")}
               <span className="absolute bottom-0 left-0 w-12 h-0.5 bg-gradient-to-r from-[#08a4b8] to-transparent"></span>
             </h4>
             <ul className="space-y-3 text-gray-400 text-sm mb-6">
-              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">โรงงาน PROSPIRA ชิซูโอกะ</a></li>
-              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">สอบถามข้อมูล</a></li>
-              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">ข้อกำหนดการใช้งานเว็บไซต์</a></li>
-              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">นโยบายความเป็นส่วนตัว</a></li>
+              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">{t("menu_contact_1")}</a></li>
+              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">{t("menu_contact_2")}</a></li>
+              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">{t("menu_contact_3")}</a></li>
+              <li><a href="#" className="hover:text-[#08a4b8] transition-all duration-300 hover:translate-x-1 inline-block">{t("menu_contact_4")}</a></li>
             </ul>
-
-            <div className="flex items-center gap-3 mt-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[#08a4b8] hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-[#08a4b8]/50">
-                <FacebookOutlined className="text-lg" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[#08a4b8] hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-[#08a4b8]/50">
-                <TwitterOutlined className="text-lg" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[#08a4b8] hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-[#08a4b8]/50">
-                <InstagramOutlined className="text-lg" />
-              </a>
-           
-            </div>
           </div>
         </div>
         <div className="mt-16 border-t border-gray-800 pt-8 text-center">
           <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} <span className="text-[#08a4b8] font-semibold">PROSPIRA CORPORATION</span>. สงวนลิขสิทธิ์ทุกประการ
+            © {new Date().getFullYear()} <span className="text-[#08a4b8] font-semibold">PROSPIRA CORPORATION</span>. {t("copyright_prefix")}
           </p>
         </div>
       </div>

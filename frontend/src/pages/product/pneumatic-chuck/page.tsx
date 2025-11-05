@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { RightOutlined, InstagramOutlined, FacebookOutlined, XOutlined } from "@ant-design/icons";
+// import { RightOutlined, InstagramOutlined, FacebookOutlined, XOutlined } from "@ant-design/icons";
+import { RightOutlined } from "@ant-design/icons";
 import ItemPneumaticChuck from "../../../images/product/pneumatic-chuck/item-pneumatic-chuck.png";
 import "../../../css/product.css";
 
@@ -107,7 +108,7 @@ export default function PneumaticChuckPage() {
                                 </div>
 
                                 {/* Share */}
-                                <div className="mt-8 sm:mt-10 lg:mt-12 pt-6 sm:pt-8 border-t border-gray-200">
+                                {/* <div className="mt-8 sm:mt-10 lg:mt-12 pt-6 sm:pt-8 border-t border-gray-200">
                                     <p className="text-xs sm:text-sm font-medium text-gray-500 mb-2 sm:mb-3">
                                         แชร์สินค้า
                                     </p>
@@ -131,7 +132,7 @@ export default function PneumaticChuckPage() {
                                             <XOutlined style={{ color: "white" }} className="text-base sm:text-lg" />
                                         </button>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </article>

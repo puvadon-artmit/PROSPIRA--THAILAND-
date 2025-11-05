@@ -10,6 +10,8 @@ import ProductRubberPage from "./pages/product/rubber/page";
 import ProductAirSpringPage from "./pages/product/air-spring/page";
 import ProductPneumaticChuckPage from "./pages/product/pneumatic-chuck/page";
 import ContactPage from "./pages/contact/page";
+import AllActivitiesPage from "./pages/ all-activities/page";
+import OurStrengthsPage from "./pages/our-strengths/page";
 
 function Router() {
   const location = useLocation();
@@ -32,6 +34,8 @@ function Router() {
           <Route path="product/air-spring" element={<ProductAirSpringPage />} />
           <Route path="product/pneumatic-chuck" element={<ProductPneumaticChuckPage />} />
           <Route path="contact" element={<ContactPage />} />
+          <Route path="all-activities" element={<AllActivitiesPage />} />
+          <Route path="our-strengths" element={<OurStrengthsPage />} />
         </Route>
 
         <Route path="/admin/login" element={<AdminLogin />} />

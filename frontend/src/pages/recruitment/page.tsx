@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 import axios from 'axios';
-import { Tag, Collapse, Typography, Divider, Badge, Spin } from 'antd';
+import { Tag, Divider, Badge, Spin, Drawer, Grid } from 'antd';
 import {
   EnvironmentOutlined,
   ClockCircleOutlined,
@@ -12,10 +12,8 @@ import Header from './header';
 import Footer from './footer';
 import type { Job } from '../../types/job';
 import JobApplyButton from './job-apply-button';
-
-const { Title, Text } = Typography;
-const { Panel } = Collapse;
 const { CheckableTag } = Tag;
+import RecruitmentHeader from './recruitment';
 
 
 export default function JobRecruitment() {
@@ -27,6 +25,12 @@ export default function JobRecruitment() {
   const [selectedLocation] = useState<string | null>(null);
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [query, setQuery] = useState('');
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [mobileOpen, setMobileOpen] = useState(false)
+
+  const screens = Grid.useBreakpoint();
+  const isMobile = !screens.md;
+
 
   const departments = useMemo(() => Array.from(new Set(jobs.map((j) => j.department))), [jobs]);
   const types = useMemo(() => Array.from(new Set(jobs.map((j) => j.type))), [jobs]);
@@ -73,7 +77,6 @@ export default function JobRecruitment() {
     }
 
     fetchJobs();
-
     return () => {
       controller.abort();
     };
@@ -98,11 +101,33 @@ export default function JobRecruitment() {
     setQuery('');
   };
 
-  return (
-    <div className="min-h-screen bg-gray-200">
-      <Header jobs={jobs} />
+  useEffect(() => {
+    if (!isMobile) {
+      if (filteredJobs.length > 0 && !selectedJob) {
+        setSelectedJob(filteredJobs[0]);
+      } else if (
+        filteredJobs.length > 0 &&
+        !filteredJobs.find(j => j.job_recruitment_id === selectedJob?.job_recruitment_id)
+      ) {
+        setSelectedJob(filteredJobs[0]);
+      } else if (filteredJobs.length === 0) {
+        setSelectedJob(null);
+      }
+    }
+  }, [filteredJobs, isMobile]);
 
-      <div className="max-w-6xl mx-auto px-4 py-6">
+  const handleJobClick = (job: Job) => {
+    setSelectedJob(job);
+    if (isMobile) {
+      setMobileOpen(true);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100">
+      <Header />
+      <RecruitmentHeader jobs={jobs} />
+      <div className="max-w-[80rem] mx-auto px-4 sm:px-0 py-6">
         <div className="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="flex-1 overflow-x-auto sm:overflow-visible">
             <div className="flex flex-wrap sm:flex-nowrap gap-2 items-center py-1">
@@ -187,7 +212,7 @@ export default function JobRecruitment() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-4">
+      <div className="max-w-[80rem] mx-auto px-4 sm:px-0  py-4">
         {loading && (
           <div className="text-center py-10">
             <Spin tip="กำลังดึงข้อมูลตำแหน่งงาน..." />
@@ -201,116 +226,141 @@ export default function JobRecruitment() {
           </div>
         )}
 
-
-        {!loading && !error && (
-          <Collapse expandIconPosition="end" ghost className="space-y-4">
+        {/* ================ เมนูตำแหน่งงาน ================ */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
+          {/* ซ้าย: รายการงาน */}
+          <div className="space-y-3">
             {filteredJobs.map((job) => (
-              <Panel
+              <div
                 key={job.job_recruitment_id}
-                header={
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-3">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-1 flex-wrap">
-                        <Title level={4} style={{ margin: 0, color: 'black', fontSize: '20px' }}>
-                          {job.title}
-                        </Title>
-                        {job.hot && (
-                          <Badge
-                            count={
-                              <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold text-white">
-                                <FireOutlined style={{ fontSize: 12, marginRight: '4px' }} /> ด่วน
-                              </span>
-                            }
-                            style={{
-                              background: 'linear-gradient(135deg,#ff3f25,#d81900)',
-                              boxShadow: '0 0 6px rgba(255,63,37,0.6)',
-                            }}
-                          />
-                        )}
-                      </div>
-                      <Text style={{ color: '#08a4b8', fontWeight: 600, fontSize: '15px' }}>
-                        {job.department}
-                      </Text>
-                      <div className="flex items-center gap-2 mt-4 md:mt-2 flex-wrap">
-                        <Tag
-                          icon={<EnvironmentOutlined />}
-                          className="px-3 py-1 text-sm font-medium"
-                          style={{ background: '#08a4b8', border: 'none', color: 'white', borderRadius: '8px' }}
-                        >
-                          {job.location}
-                        </Tag>
-                        <Tag
-                          icon={<ClockCircleOutlined />}
-                          className="px-3 py-1 text-sm font-medium"
-                          style={{
-                            background: 'linear-gradient(135deg, #08a4b8 0%, #0891a3 100%)',
-                            border: 'none',
-                            color: 'white',
-                            borderRadius: '8px',
-                          }}
-                        >
-                          {job.type}
-                        </Tag>
-                        <Tag
-                          icon={<DollarOutlined />}
-                          className="px-3 py-1 text-sm font-medium"
-                          style={{
-                            background: 'linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%)',
-                            border: 'none',
-                            color: 'white',
-                            borderRadius: '8px',
-                          }}
-                        >
-                          {job.salary}
-                        </Tag>
-                      </div>
-                    </div>
-                  </div>
-                }
-                style={{ marginBottom: '12px', background: 'white', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 12px 16px -6px rgba(8,164,184,0.15)' }}
-                className="hover:shadow-2xl transition-all duration-300"
+                onClick={() => handleJobClick(job)}
+                className={`p-4 rounded-xl cursor-pointer border transition-all duration-300 ${selectedJob?.job_recruitment_id === job.job_recruitment_id
+                  ? 'bg-[#08a4b8]/10 border-[#08a4b8]'
+                  : 'bg-white hover:shadow-lg border-gray-200'
+                  }`}
               >
-                <div className="pt-4 space-y-4 px-2">
-                  <div className="relative p-4 rounded-xl bg-white/10 backdrop-blur-md border border-gray-400/20 shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#08a4b8] to-cyan-400 rounded-t-xl pointer-events-none"></div>
-                    <div className="relative">
-                      <Title level={4} className="text-[#08a4b8] font-semibold mb-2 text-[18px]">รายละเอียดงาน</Title>
-                      <Text className="text-gray-800 text-[16px] leading-relaxed">{job.description}</Text>
-                    </div>
-                  </div>
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-gray-900">{job.title}</h3>
+                  {job.hot && (
+                    <Tag color="volcano" icon={<FireOutlined />}>
+                      ด่วน
+                    </Tag>
+                  )}
+                </div>
+                <p className="text-[#08a4b8] font-medium">{job.department}</p>
+                <div className="flex flex-wrap gap-2 mt-2 text-sm text-gray-700">
+                  <Tag icon={<EnvironmentOutlined />}>{job.location}</Tag>
+                  <Tag icon={<ClockCircleOutlined />}>{job.type}</Tag>
+                  <Tag icon={<DollarOutlined />}>{job.salary}</Tag>
+                </div>
+              </div>
+            ))}
+          </div>
 
-                  <Divider style={{ borderColor: 'rgba(8, 164, 184, 0.2)' }} />
+          {/* ขวา: รายละเอียด (แสดงเฉพาะเดสก์ท็อป) */}
+          <div className="hidden md:block bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex-col h-full">
+            {selectedJob ? (
+              <>
+                {/* Header Section */}
+                <div className="bg-gradient-to-r from-[#08a4b8] to-cyan-600 px-8 py-6">
+                  <h2 className="text-3xl font-bold text-white drop-shadow-lg">
+                    {selectedJob.title}
+                  </h2>
+                </div>
 
-                  <div className="relative p-4 rounded-xl bg-white/10 backdrop-blur-md border border-gray-400/20 shadow-lg overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#08a4b8] to-cyan-400 rounded-t-xl pointer-events-none"></div>
-                    <div className="relative">
-                      <Title level={4} className="text-[#08a4b8] font-semibold text-[18px] mb-6">✨ คุณสมบัติที่ต้องการ</Title>
-                      <div className="space-y-3 mt-4">
-                        {job.requirements.map((req, index) => (
-                          <div
-                            key={index}
-                            className="flex items-start bg-white/5 p-3 rounded-lg border border-gray-400/20 shadow-sm transition-shadow duration-200 hover:shadow-md"
-                          >
-                            <div className="flex-shrink-0 w-7 h-7 rounded-full bg-gradient-to-r from-[#08a4b8]/80 to-cyan-500/80 flex items-center justify-center text-black font-bold mr-3">
-                              {index + 1}
-                            </div>
-                            <Title level={5} className="text-gray-800 text-[6px] leading-relaxed">{req}</Title>
-                          </div>
-                        ))}
+                {/* Content Section - Scrollable */}
+                <div className="flex-1 overflow-y-auto px-8 py-6 space-y-6">
+                  {/* Description */}
+                  <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                    <div className="flex items-start gap-3">
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold text-gray-800 mb-2">รายละเอียดงาน</h3>
+                        <p className="text-gray-600 leading-relaxed">{selectedJob.description}</p>
                       </div>
                     </div>
                   </div>
 
-                  <div style={{ paddingTop: '12px', textAlign: 'center' }}>
-                    <JobApplyButton job={job} />
+                  {/* Requirements */}
+                  <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                    <div className="flex items-center gap-3 mb-4">
+                      <h3 className="text-lg font-semibold text-gray-800">คุณสมบัติที่ต้องการ</h3>
+                    </div>
+
+                    <ul className="space-y-3">
+                      {selectedJob.requirements.map((req, i) => (
+                        <li key={i} className="flex items-start gap-3 group">
+                          <div className="w-6 h-6 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform">
+                            <span className="text-white text-xs font-bold">{i + 1}</span>
+                          </div>
+                          <span className="text-gray-700 leading-relaxed flex-1">{req}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
-              </Panel>
-            ))}
 
-            {filteredJobs.length === 0 && <div className="text-center py-10 text-gray-600">ไม่พบตำแหน่งงานที่ตรงกับตัวกรองของคุณ</div>}
-          </Collapse>
-        )}
+                {/* Footer Section - Fixed at Bottom */}
+                <div className="border-t border-gray-200 bg-white px-8 py-6 flex justify-center">
+                  <JobApplyButton job={selectedJob} />
+                </div>
+              </>
+            ) : (
+              <div className="flex-1 flex flex-col items-center justify-center text-center p-12">
+                <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mb-6">
+                  <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-700 mb-2">เลือกตำแหน่งงาน</h3>
+                <p className="text-gray-500 max-w-xs">
+                  เลือกตำแหน่งงานทางซ้ายเพื่อดูรายละเอียดและสมัครงาน
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Drawer สำหรับมือถือ */}
+        <Drawer
+          open={mobileOpen}
+          onClose={() => setMobileOpen(false)}
+          title={selectedJob?.title ?? 'รายละเอียดงาน'}
+          placement="bottom"
+          height="85vh"
+          destroyOnClose
+          bodyStyle={{ padding: 16 }}
+          className="rounded-4xl"
+        >
+          {selectedJob ? (
+            <>
+              <div className="mb-4 text-[#08a4b8] font-medium">{selectedJob.department}</div>
+              <div className="flex flex-wrap gap-2 mb-4">
+                <Tag icon={<EnvironmentOutlined />}>{selectedJob.location}</Tag>
+                <Tag icon={<ClockCircleOutlined />}>{selectedJob.type}</Tag>
+                <Tag icon={<DollarOutlined />}>{selectedJob.salary}</Tag>
+              </div>
+
+              <h3 className="text-lg font-semibold text-[#08a4b8] mb-2">รายละเอียดงาน</h3>
+              <p className="text-gray-800 mb-4">{selectedJob.description}</p>
+
+              <Divider />
+
+              <h3 className="text-lg font-semibold text-[#08a4b8] mb-2">คุณสมบัติ</h3>
+              <ul className="list-decimal pl-6 space-y-2 text-gray-700">
+                {selectedJob.requirements.map((req, i) => (
+                  <li key={i}>{req}</li>
+                ))}
+              </ul>
+
+              <div className="mt-6">
+                <JobApplyButton job={selectedJob} />
+              </div>
+            </>
+          ) : (
+            <div className="text-center text-gray-500 py-10">ไม่พบรายละเอียด</div>
+          )}
+        </Drawer>
+        {/* ========================================================== */}
       </div>
 
       <Footer />

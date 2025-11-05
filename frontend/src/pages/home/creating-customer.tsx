@@ -1,8 +1,10 @@
 import team from "../../images/home/trust.jpeg";
 import styles from "../../css/our-strengths.module.css";
 import DataES from "../../images/home/DataES.png";
+import { useTranslation } from "react-i18next";
 
 export default function CreatingCustomer() {
+    const { t } = useTranslation();
     return (
         <section className="relative bg-white">
             <div className="relative h-[350px] md:h-[320px] overflow-hidden">
@@ -15,14 +17,13 @@ export default function CreatingCustomer() {
 
                 <div className="relative h-full flex flex-col items-center justify-center text-white text-center px-6 z-10">
                     <h1 className={`text-4xl md:text-5xl font-bold mb-6 drop-shadow-2xl ${styles.animateSlideUp}`}>
-                        การสร้างมูลค่าและความไว้วางใจให้กับ
+                        {t("banner_title_p1")}
                         <span className="mt-2 bg-gradient-to-r from-cyan-300 via-blue-300 to-cyan-200 bg-clip-text text-transparent">
-                            ลูกค้า
+                            {t("banner_title_highlight")}
                         </span>
                     </h1>
-
                     <p className={`max-w-3xl text-base md:text-lg leading-relaxed text-gray-100 drop-shadow-lg ${styles.animateSlideUp}`} style={{ animationDelay: "0.2s" }}>
-                        ภาวะผู้นำส่งเสริมความเป็นเจ้าของของพนักงาน ขับเคลื่อนนวัตกรรม และสนับสนุน TQM
+                        {t("banner_desc_p1")}
                     </p>
                 </div>
             </div>
@@ -33,19 +34,19 @@ export default function CreatingCustomer() {
                     <img
                         src={DataES}
                         className="w-full h-auto object-contain"
-                        alt="ปลอดภัยไว้ก่อน"
+                        alt={t("content_desc_p2")}
                     />
                 </div>
 
                 <div className="flex-1 text-left">
                     <h1 className="text-4xl md:text-5xl font-bold mb-6 drop-shadow-2xl text-black">
-                        พันธกิจด้านคุณภาพ
+                        {t("content_title")}
                     </h1>
                     <p className="max-w-2xl text-base md:text-lg leading-relaxed text-gray-600 drop-shadow-lg">
-                        "รับใช้สังคมด้วยคุณภาพที่เหนือกว่า"
+                        {t("content_slogan")}
                     </p>
                     <p className="max-w-2xl text-base md:text-lg leading-relaxed text-gray-600 drop-shadow-lg">
-                        เรามุ่งมั่นที่จะมอบสิ่งที่ดีที่สุดให้กับลูกค้าและสังคม ไม่เพียงแต่ในแง่ของผลิตภัณฑ์ บริการ และเทคโนโลยีเท่านั้น แต่ยังรวมถึงกิจกรรมองค์กรทั้งหมดของเราด้วย ความมุ่งมั่นในคุณภาพของเราไม่ได้มาจากการขาดทุน แต่มาจากความมุ่งมั่นในการพัฒนาความปลอดภัยและคุณภาพชีวิตของผู้คนทั่วโลก ด้วยพันธกิจของเรา เรามุ่งมั่นที่จะเป็นบริษัทที่ได้รับความไว้วางใจจากทั่วโลก เป็นบริษัทที่เราทุกคนสามารถภาคภูมิใจได้
+                        {t("content_desc_p1")}
                     </p>
                 </div>
             </div>

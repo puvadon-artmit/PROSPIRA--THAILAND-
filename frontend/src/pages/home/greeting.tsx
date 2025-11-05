@@ -1,6 +1,9 @@
 import icon_paperairplane from "../../images/paper-airplane.webp";
+import { useTranslation } from "react-i18next";
 
 export default function Greeting() {
+    const { t } = useTranslation();
+
   return (
     <section className="relative bg-gradient-to-b from-white via-[#f8fcfc] to-white py-20 px-6 text-gray-800 overflow-hidden"
     style={{
@@ -39,10 +42,10 @@ export default function Greeting() {
             <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#08a4b8]"></div>
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-[#08a4b8] tracking-tight mb-2">
-            คำทักทายจากประธานบริษัท
+            {t("section_title_th")}
           </h1>
           <p className="text-gray-500 text-sm uppercase tracking-widest">
-            Message from CEO
+            {t("section_title_en")}
           </p>
         </div>
       </div>
@@ -62,17 +65,16 @@ export default function Greeting() {
 
         <div className="space-y-6 relative z-10">
             <p className="text-lg md:text-xl leading-relaxed text-gray-700 first-letter:text-5xl first-letter:font-bold first-letter:text-[#08a4b8] first-letter:mr-2 first-letter:float-left">
-              ธุรกิจผลิตยางกันสั่นสะเทือนของบริษัทเราได้ตอบสนองต่อความคาดหวังของลูกค้าจำนวนมากในประเทศญี่ปุ่น
-              รวมถึงผู้ผลิตรถยนต์รายใหญ่ของโลกที่มีความต้องการด้านประสิทธิภาพและคุณภาพสูงสุดมาอย่างยาวนาน
+              {t("p1_main_content")}
             </p>
 
             <div className="relative pl-6 border-l-4 border-[#08a4b8]/30">
               <p className="text-lg md:text-xl leading-relaxed text-gray-700 italic">
-                เราภาคภูมิใจในปรัชญาขององค์กรที่ว่า{" "}
+                {t("p2_quote_part1")}{" "}
                 <span className="font-semibold text-[#08a4b8]">
-                  "มุ่งมั่นสร้างคุณภาพสูงสุดเพื่อประโยชน์ต่อสังคม"
+                  {t("p2_quote_philosophy")}
                 </span>
-                และจะยังคงมุ่งมั่นพัฒนาอย่างต่อเนื่องเพื่อมอบคุณภาพและความเชื่อมั่นให้กับลูกค้าทั่วโลก
+                {t("p2_quote_part2")}
               </p>
             </div>
 
@@ -91,10 +93,10 @@ export default function Greeting() {
             <div className="flex justify-end items-end gap-6">
               <div className="text-right">
                 <p className="text-sm text-gray-500 mb-1 tracking-wide">
-                  ประธานบริษัท
+                  {t("ceo_title")}
                 </p>
                 <p className="text-2xl md:text-3xl font-bold text-[#08a4b8] tracking-wide">
-                  Hiroshi Tanaka
+                  {t("ceo_name")}
                 </p>
                 <div className="mt-2 h-0.5 w-full bg-gradient-to-l from-[#08a4b8] to-transparent"></div>
               </div>

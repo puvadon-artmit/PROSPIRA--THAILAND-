@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, Modal, Form, Input, Upload } from "antd";
 import { SendOutlined, UploadOutlined } from "@ant-design/icons";
 import toast, { Toaster } from "react-hot-toast";
+import "../../css/job-apply.css";
 
 const JobApplyButton = ({ job }: { job: any }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,7 +33,6 @@ const JobApplyButton = ({ job }: { job: any }) => {
             if (resumeFile) {
                 formData.append("resume", resumeFile);
             }
-
             const res = await fetch(
                 `${import.meta.env.VITE_API_BASE_URL}/api/job-application/create-job-application`,
                 {
@@ -40,7 +40,6 @@ const JobApplyButton = ({ job }: { job: any }) => {
                     body: formData,
                 }
             );
-
             if (!res.ok) {
                 const errText = await res.text().catch(() => "");
                 throw new Error(errText || `Server returned ${res.status}`);
@@ -330,18 +329,6 @@ const JobApplyButton = ({ job }: { job: any }) => {
                     </Form.Item>
                 </Form>
 
-                <style>{`
-          @keyframes fadeIn {
-            from {
-              opacity: 0;
-              transform: translateY(-10px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
-        `}</style>
             </Modal>
         </>
     );

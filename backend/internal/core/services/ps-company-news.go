@@ -49,16 +49,22 @@ func (s *CompanyNewsService) CreateCompanyNewsService(req models.CompanyNewsResp
 	return nil
 }
 
-func (s *CompanyNewsService) GetCompanyNews(limit, offset int) ([]models.CompanyNewsReq, error) {
-	var jobs []models.CompanyNewsReq
-
-	query, err := s.companyNewsRepo.GetCompanyNews(limit, offset)
-	if err != nil {
-		return nil, err
+func (s *CompanyNewsService) GetCompanyNews(limit, offset int) (models.CompanyNewsListResp, error) {
+	if limit <= 0 {
+		limit = 10
+	}
+	if offset < 0 {
+		offset = 0
 	}
 
+	query, total, err := s.companyNewsRepo.GetCompanyNews(limit, offset)
+	if err != nil {
+		return models.CompanyNewsListResp{}, err
+	}
+
+	jobs := make([]models.CompanyNewsReq, 0, len(query))
 	for _, job := range query {
-		jobReq := models.CompanyNewsReq{
+		jobs = append(jobs, models.CompanyNewsReq{
 			CompanyNewsID:    job.CompanyNewsID,
 			CompanyNewsPhoto: job.CompanyNewsPhoto,
 			Title:            job.Title,
@@ -67,11 +73,21 @@ func (s *CompanyNewsService) GetCompanyNews(limit, offset int) ([]models.Company
 			UsernameCreator:  job.UsernameCreator,
 			CreatedAt:        job.CreatedAt.Format("2006-01-02 15:04:05"),
 			UpdatedAt:        job.UpdatedAt.Format("2006-01-02 15:04:05"),
-		}
-		jobs = append(jobs, jobReq)
+		})
 	}
 
-	return jobs, nil
+	totalPages := 0
+	if total > 0 {
+		totalPages = int((total + int64(limit) - 1) / int64(limit))
+	}
+
+	return models.CompanyNewsListResp{
+		Data:       jobs,
+		Total:      total,
+		TotalPages: totalPages,
+		Limit:      limit,
+		Offset:     offset,
+	}, nil
 }
 
 func (s *CompanyNewsService) GetCompanyNewsByTitle(title string) (models.CompanyNewsReq, error) {

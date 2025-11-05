@@ -10,7 +10,8 @@ body {
 .ant-dropdown, .ant-dropdown-menu, .ant-menu, .ant-menu-item,
 .ant-select-selector, .ant-select-selection-item, .ant-input, .ant-typography,
 .ant-form-item-label, .ant-checkbox-wrapper > label,
-.ant-upload, .ant-tag, .ant-tag-checkable, .ant-tag-checkable-checked, .ant-badge {
+.ant-upload, .ant-tag, .ant-tag-checkable, .ant-tag-checkable-checked, .ant-badge,
+.ant-drawer {
   font-family: 'Kanit', sans-serif !important;
 }
 
@@ -49,6 +50,8 @@ body {
 .ant-modal-content {
   font-family: 'Kanit', sans-serif !important;
 }
+
+html:focus-within { scroll-behavior: smooth; }
 
 /* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;

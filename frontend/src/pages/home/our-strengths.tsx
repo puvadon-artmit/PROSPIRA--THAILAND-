@@ -5,37 +5,39 @@ import icon_technology from "../../images/icon-strengths/technology.png";
 import icon_production from "../../images/icon-strengths/production.png";
 import icon_qa from "../../images/icon-strengths/qa.png";
 import icon_customer from "../../images/icon-strengths/service.png";
+import { useTranslation } from "react-i18next";
 
 
 export default function OurStrengths() {
+  const { t } = useTranslation();
   const strengths = [
     {
-      title: "เทคโนโลยีระดับโลก",
-      desc: "เราพัฒนายางกันสั่นด้วยเทคโนโลยีระดับแนวหน้าของโลก เพื่อให้ได้คุณภาพสูงสุดในทุกขั้นตอนการผลิต",
+      title: t("strength1_title"),
+      desc: t("strength1_desc"),
       icon: (
         <img src={icon_technology} alt="Technology" className="w-8 h-8" />
       ),
       gradient: "from-cyan-500 to-blue-500",
     },
     {
-      title: "ระบบการผลิตครบวงจร",
-      desc: "ตั้งแต่การจัดซื้อ การผลิต จนถึงโลจิสติกส์ เรามีระบบที่เชื่อมโยงทุกขั้นตอนเข้าด้วยกันเพื่อประสิทธิภาพสูงสุด",
+      title: t("strength2_title"),
+      desc: t("strength2_desc"),
       icon: (
         <img src={icon_production} alt="Production" className="w-8 h-8" />
       ),
       gradient: "from-blue-500 to-indigo-500",
     },
     {
-      title: "การควบคุมคุณภาพอย่างเข้มงวด",
-      desc: "เราดำเนินการตามมาตรฐานคุณภาพสากล ตรวจสอบทุกขั้นตอน เพื่อความพึงพอใจสูงสุดของลูกค้า",
+      title: t("strength3_title"),
+      desc: t("strength3_desc"),
       icon: (
         <img src={icon_qa} alt="QA" className="w-8 h-8" />
       ),
       gradient: "from-indigo-500 to-purple-500",
     },
     {
-      title: "การผลิตตามสเปคลูกค้า (Custom Made)",
-      desc: "สามารถออกแบบและผลิตได้ตามความต้องการเฉพาะของลูกค้า เพื่อให้เหมาะสมกับการใช้งานจริงที่สุด",
+      title: t("strength4_title"),
+      desc: t("strength4_desc"),
       icon: (
         <img src={icon_customer} alt="Customer" className="w-8 h-8" />
       ),
@@ -55,15 +57,14 @@ export default function OurStrengths() {
 
         <div className="relative h-full flex flex-col items-center justify-center text-white text-center px-6 z-10">
           <h1 className={`text-4xl md:text-5xl font-bold mb-6 drop-shadow-2xl ${styles.animateSlideUp}`}>
-            จุดแข็งหลัก
+            {t("section_title_main")}
             <span className="block mt-2 bg-gradient-to-r from-cyan-300 via-blue-300 to-cyan-200 bg-clip-text text-transparent">
-              ของบริษัทเรา
+              {t("section_title_sub")}
             </span>
           </h1>
 
           <p className={`max-w-3xl text-base md:text-lg leading-relaxed text-gray-100 drop-shadow-lg ${styles.animateSlideUp}`} style={{ animationDelay: "0.2s" }}>
-            ยางกันสั่นของเราผลิตด้วยเทคโนโลยีระดับแนวหน้าของโลก
-            โดยมีระบบที่สามารถดำเนินการได้อย่างครบวงจร ตั้งแต่การจัดซื้อ การผลิต การขนส่ง และการบริหารคุณภาพที่เข้มงวด เพื่อส่งมอบสินค้าที่มีคุณภาพสูงสุดแก่ลูกค้า
+            {t("banner_desc")}
           </p>
         </div>
       </div>
@@ -100,7 +101,7 @@ export default function OurStrengths() {
             className="group inline-flex items-center gap-3 px-8 py-3 rounded-full bg-[#08a4b8] text-white font-bold text-lg shadow-2xl hover:shadow-[#08a4b8]/50 hover:scale-105 transition-all duration-500 relative overflow-hidden"
           >
             <div className={styles.shineEffect}></div>
-            <span className="relative z-10">ดูรายละเอียดเพิ่มเติม</span>
+            <span className="relative z-10">{t("cta_button_info")}</span>
             <RightOutlined className="relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
           </a>
 

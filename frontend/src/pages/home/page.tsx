@@ -7,6 +7,7 @@ import CompanyNews from "./company-news";
 import Footer from "../../components/footer";
 import SafetyFirst from "./safety-first";
 import CreatingCustomer from "./creating-customer";
+import EnvironmentalMission from "./environmental-mission";
 
 export default function HomePage() {
   return (
@@ -18,6 +19,7 @@ export default function HomePage() {
       <ProductInformation />
       <SafetyFirst />
       <CreatingCustomer />
+      <EnvironmentalMission />
       <CompanyNews />
       <Footer />
     </div>

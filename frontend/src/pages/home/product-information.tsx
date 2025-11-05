@@ -5,10 +5,11 @@ import {
   GlobalOutlined,
 } from "@ant-design/icons";
 import mainProducts from "../../images/main-products.jpeg";
-import product1 from "../../images/product/product1.jpg";
-import product2 from "../../images/product/product2.jpg";
-import product3 from "../../images/product/product3.jpg";
+import product1 from "../../images/product/rubber/item-rubber2.png";
+import product2 from "../../images/product/air-spring/item-air-spring.png";
+import product3 from "../../images/product/pneumatic-chuck/item-pneumatic-chuck.png";
 import { useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface FeatureBadgeProps {
   icon: React.ElementType;
@@ -39,6 +40,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
   gradient,
   index,
 }) => {
+
+  const { t } = useTranslation();
 
   return (
     <div
@@ -90,7 +93,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 href={link}
                 className="flex items-center justify-center gap-2 w-full px-5 py-3 bg-white/95 backdrop-blur-md rounded-xl text-[#08a4b8] font-semibold shadow-lg hover:bg-white hover:scale-105 active:scale-95 transition-all duration-300"
               >
-                <span>ดูรายละเอียดผลิตภัณฑ์</span>
+                <span>{t("cta_main_button")}</span>
                 <RightOutlined className="text-sm" />
               </a>
             </div>
@@ -105,30 +108,28 @@ const ProductCard: React.FC<ProductCardProps> = ({
 };
 
 export default function ProductInformation() { 
+  const { t } = useTranslation();
   const location = useLocation();
   const lang = location.pathname.split("/")[1];
   const products = [
     {
       image: product1,
-      title: "ชิ้นส่วนยานยนต์",
-      description:
-        "ผลิตภัณฑ์ยางกันสั่นสำหรับรถยนต์ที่ผลิตจากเทคโนโลยี樹脂加工 (การประมวลผลเรซิน) เหมาะสำหรับการใช้งานเช่น แท่นยึดเครื่องยนต์ (Engine Mount) และส่วนประกอบอื่น ๆ ที่ช่วยเพิ่มความนุ่มนวลและลดแรงสั่นสะเทือนในรถยนต์",
+      title: t("product1_title"),
+      description: t("product1_desc"),
       link: `${lang}/product/rubber`,
       gradient: "from-blue-500 to-cyan-400",
     },
     {
       image: product2,
-      title: "แอร์สปริง (Air Spring",
-      description:
-        "แอร์สปริงคือชิ้นงานรูปทรงกระบอกที่ประกอบด้วยยางและผ้า ภายในบรรจุอากาศอัด ตัวเบลโลวส์เองไม่รับน้ำหนักโดยตรง แต่แรงดันอากาศภายในทำหน้าที่รองรับแรงและน้ำหนัก",
-       link: `${lang}/product/air-spring`,
+      title: t("product2_title"),
+      description: t("product2_desc"),
+      link: `${lang}/product/air-spring`,
       gradient: "from-emerald-500 to-teal-400",
     },
     {
       image: product3,
-      title: "Pneumatic Chuck",
-      description:
-        "Pneumatic Chuck หรือ ชิ้นส่วนยึดเครื่องยนต์ ใช้ลมอัดเป็นตัวกลางในการยึดเครื่องยนต์ ช่วยลดแรงสั่นสะเทือนและเพิ่มความนุ่มนวลในเครื่องยนต์",
+      title: t("product3_title"),
+      description: t("product3_desc"),
       link: `${lang}/product/pneumatic-chuck`,
       gradient: "from-purple-500 to-pink-400",
     },
@@ -176,10 +177,10 @@ export default function ProductInformation() {
               style={{ animation: "float 3s ease-in-out infinite" }}
             >
               <div className="text-[#08a4b8] font-bold text-lg drop-shadow-sm">
-                Premium Quality
+                {t("floating_box_title")}
               </div>
               <div className="text-gray-200 text-sm drop-shadow-sm">
-                ISO Certified
+                {t("floating_box_desc")}
               </div>
             </div>
           </div>
@@ -187,30 +188,25 @@ export default function ProductInformation() {
           <div style={{ animation: "slideIn 0.8s ease-out 0.2s both" }}>
             <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-white/40 to-white/10 backdrop-blur-lg border border-white/30 text-[#08a4b8] text-sm font-semibold shadow-md mb-6 hover:from-white/30 hover:to-white/20 transition-all duration-300">
               <StarOutlined style={{ fontSize: 16 }} />
-              <span>Our Main Products</span>
+              <span>{t("badge_main_products")}</span>
             </div>
 
             <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-[#075b60] via-[#08a4b8] to-[#06c8df] bg-clip-text text-transparent">
-              ผลิตภัณฑ์หลักของเรา
+              {t("hero_title")}
             </h1>
             <div className="mt-4 h-1.5 w-32 rounded-full bg-gradient-to-r from-[#08a4b8] to-[#06c8df] shadow-lg" />
             <p className="mt-8 text-gray-700 text-lg leading-relaxed">
-              ยางกันสั่นสะเทือนสำหรับรถยนต์ที่เกิดจากเทคโนโลยีการขึ้นรูป
-              และการประมวลผลเรซินขั้นสูงของ{" "}
-              <strong className="text-[#08a4b8]">Prospeira</strong> —
-              เราผลิตชิ้นส่วนยานยนต์ เช่น แท่นยึดเครื่องยนต์ (Engine Mount)
-              และชิ้นส่วนกันสั่นอื่น ๆ ภายใต้ระบบการผลิตระดับสากล
-              เพื่อมุ่งช่วยให้การขับขี่มีความสะดวกสบายและปลอดภัยยิ่งขึ้น
+              {t("hero_desc_p1")}
             </p>
 
             {/* Feature badges */}
             <div className="mt-8 flex flex-wrap gap-3">
               <FeatureBadge
                 icon={GlobalOutlined}
-                text="ผลิตภายใต้ระบบ Global"
+                text={t("feature_global")}
               />
-              <FeatureBadge icon={SafetyOutlined} text="ทดสอบอย่างเข้มงวด" />
-              <FeatureBadge icon={StarOutlined} text="รองรับ OEM/ODM" />
+              <FeatureBadge icon={SafetyOutlined} text={t("feature_testing")} />
+              <FeatureBadge icon={StarOutlined} text={t("feature_oem")} />
             </div>
 
             {/* CTA Buttons */}
@@ -219,34 +215,26 @@ export default function ProductInformation() {
                 href="/product/rubber"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#08a4b8] to-[#06c8df] text-white font-medium shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group"
               >
-                <span>ดูรายละเอียดผลิตภัณฑ์หลัก</span>
+                <span>{t("cta_main_button")}</span>
                 <RightOutlined className="group-hover:translate-x-1 transition-transform duration-300" />
               </a>
               <a
                 href="/contact"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white border-2 border-[#08a4b8] text-[#08a4b8] font-medium hover:bg-[#08a4b8] hover:text-white transition-all duration-300"
               >
-                ติดต่อสอบถาม
+                {t("cta_contact_button")}
               </a>
             </div>
           </div>
         </div>
 
-        {/* Product Categories Section */}
-        {/* <div className="mb-16 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#08a4b8] to-[#06c8df] bg-clip-text text-transparent mb-3">
-            หมวดหมู่ผลิตภัณฑ์
-          </h2>
-          <p className="text-gray-600 text-lg">สำรวจผลิตภัณฑ์คุณภาพของเรา</p>
-        </div> */}
-
         <header className="mb-12 text-center">
           <h2 className="text-3xl md:text-5xl font-extrabold text-[#08a4b8]">
-            หมวดหมู่ผลิตภัณฑ์
+            {t("section_header_title")}
           </h2>
           <div className="mx-auto mt-4 h-1 w-32 rounded-full bg-gradient-to-r from-[#08a4b8] to-[#06a1b0]"></div>
           <p className="mt-3 text-sm text-gray-500 uppercase tracking-widest">
-            Product Categories
+            {t("section_header_subtitle")}
           </p>
         </header>
 

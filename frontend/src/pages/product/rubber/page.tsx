@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { RightOutlined, InstagramOutlined, FacebookOutlined, XOutlined } from "@ant-design/icons";
-import ItemRubber from "../../../images/product/rubber/item-rubber.png";
+// import { RightOutlined, InstagramOutlined, FacebookOutlined, XOutlined } from "@ant-design/icons";
+import { RightOutlined } from "@ant-design/icons";
+import ItemRubber from "../../../images/product/rubber/item-rubber2.png";
 import "../../../css/product.css";
 
 type TabKey = "overview" | "specifications";
@@ -92,7 +93,7 @@ export default function RubberPage() {
                                 </div>
 
                                 {/* Share */}
-                                <div className="mt-8 sm:mt-10 lg:mt-12 pt-6 sm:pt-8 border-t border-gray-200">
+                                {/* <div className="mt-8 sm:mt-10 lg:mt-12 pt-6 sm:pt-8 border-t border-gray-200">
                                     <p className="text-xs sm:text-sm font-medium text-gray-500 mb-2 sm:mb-3">
                                         แชร์สินค้า
                                     </p>
@@ -116,7 +117,7 @@ export default function RubberPage() {
                                             <XOutlined style={{ color: "white" }} className="text-base sm:text-lg" />
                                         </button>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </article>

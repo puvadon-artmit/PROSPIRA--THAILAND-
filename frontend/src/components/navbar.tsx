@@ -6,19 +6,30 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { BiWorld } from "react-icons/bi";
 import CompanyMenu from "./company-menu";
+import { Dropdown } from 'antd';
+import type { MenuProps } from 'antd';
+import ProductInformation from "./product-information";
+
+type Lang = 'th' | 'en' | 'zh';
+
+const labelMap: Record<Lang, string> = {
+  th: 'ไทย',
+  en: 'English',
+  zh: '中文',
+};
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCompanyMenuOpen, setIsCompanyMenuOpen] = useState(false);
-  const [isIpad, setIsIpad] = useState(false); // <- NEW
+  const [isIpad, setIsIpad] = useState(false); 
   const location = useLocation();
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const lang = location.pathname.split("/")[1];
 
   const handleChangeLang = (newLang: string) => {
-    const currentPath = window.location.pathname.replace(/^\/(th|en)/, "");
+    const currentPath = window.location.pathname.replace(/^\/(th|en|zh)/, "");
     navigate(`/${newLang}${currentPath}`);
   };
   const isCompanyPage = ["/about", "/history", "/vision", "/team"].includes(
@@ -27,12 +38,11 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     const pathLang = location.pathname.split("/")[1];
-    if (pathLang && (pathLang === "th" || pathLang === "en") && i18n.language !== pathLang) {
+    if (pathLang && (pathLang === "th" || pathLang === "en" || pathLang === "zh") && i18n.language !== pathLang) {
       i18n.changeLanguage(pathLang);
     }
   }, [location.pathname, i18n]);
 
-  // Detect iPad (including iPadOS that reports as Mac)
   useEffect(() => {
     const ua = navigator.userAgent || "";
     const isRealIpad = /iPad/.test(ua);
@@ -48,6 +58,16 @@ const Navbar: React.FC = () => {
   }, []);
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+
+  const langItems: MenuProps['items'] = [
+  { key: 'th', label: 'ไทย' },
+  { key: 'en', label: 'English' },
+  { key: 'zh', label: '中文' },
+];
+
+const onLangClick: MenuProps['onClick'] = ({ key }) => {
+  handleChangeLang(key as Lang);
+};
 
   return (
     <nav
@@ -76,14 +96,15 @@ const Navbar: React.FC = () => {
             </a>
 
             <CompanyMenu isCompanyPage={isCompanyPage} lang={lang}/>
-            <a
+            <ProductInformation isCompanyPage={isCompanyPage} lang={lang}/>
+            {/* <a
               href={`/${lang}/services`}
               className={`relative px-4 py-2 transition-all duration-300 font-medium group ${
                 location.pathname === "/services" ? "text-[#08a4b8]" : "text-black hover:text-[#08a4b8]"
               }`}
             >
               <span className="relative z-10">{t("services")}</span>
-            </a>
+            </a> */}
             <a
               href={`/${lang}/recruitment`}
               className={`relative px-4 py-2 transition-all duration-300 font-medium group ${
@@ -101,32 +122,31 @@ const Navbar: React.FC = () => {
 
             <div className="flex items-center gap-3 ml-6 bg-white/10 rounded-full px-3 py-1.5 shadow-sm backdrop-blur-md border border-white/20">
               <BiWorld className="text-2xl text-[#08a4b8]" />
-              <div className="flex items-center gap-2">
-                <button
-                  className={`relative px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-300 ${
-                    lang === "th"
-                      ? "bg-gradient-to-r from-[#08a4b8] to-[#06b6d4] text-white shadow-[0_0_8px_rgba(8,164,184,0.5)] scale-105"
-                      : "text-gray-600 hover:text-[#08a4b8] hover:bg-white/40"
-                  }`}
-                  onClick={() => handleChangeLang("th")}
-                >
-                  ไทย
-                  {lang === "th" && <span className="absolute inset-0 rounded-lg bg-white/10 animate-pulse"></span>}
-                </button>
 
+              <Dropdown
+                trigger={['click']}
+                placement="bottomRight"
+                arrow
+                menu={{
+                  items: langItems,
+                  onClick: onLangClick,
+                  selectedKeys: [lang], 
+                }}
+              >
                 <button
-                  className={`relative px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-300 ${
-                    lang === "en"
-                      ? "bg-gradient-to-r from-[#08a4b8] to-[#06b6d4] text-white shadow-[0_0_8px_rgba(8,164,184,0.5)] scale-105"
-                      : "text-gray-600 hover:text-[#08a4b8] hover:bg-white/40"
-                  }`}
-                  onClick={() => handleChangeLang("en")}
+                  className="relative flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-300
+                            bg-gradient-to-r from-[#08a4b8] to-[#06b6d4] text-white
+                            shadow-[0_0_8px_rgba(8,164,184,0.5)] hover:opacity-95"
                 >
-                  EN
-                  {lang === "en" && <span className="absolute inset-0 rounded-lg bg-white/10 animate-pulse"></span>}
+                  <span className="text-white">{labelMap[lang as Lang] ?? 'ภาษา'}</span>
+                  <svg className="w-4 h-4 opacity-90" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" />
+                  </svg>
+                  <span className="absolute inset-0 rounded-lg bg-white/10 animate-pulse pointer-events-none" />
                 </button>
-              </div>
+              </Dropdown>
             </div>
+
           </div>
 
           <div className={`${isIpad ? "" : "xl:hidden"}`}>
