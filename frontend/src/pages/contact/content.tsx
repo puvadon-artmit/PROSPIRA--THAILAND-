@@ -12,7 +12,7 @@ export default function Content() {
         "https://www.google.com/maps/place/%E0%B8%9A%E0%B8%A3%E0%B8%B4%E0%B8%A9%E0%B8%B1%E0%B8%97+%E0%B8%9E%E0%B8%A3%E0%B9%8A%E0%B8%AD%E0%B8%AA%E0%B9%84%E0%B8%9E%E0%B8%A3%E0%B9%88%E0%B8%B2+(%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B9%80%E0%B8%97%E0%B8%A8%E0%B9%84%E0%B8%97%E0%B8%A2)+%E0%B8%88%E0%B8%B3%E0%B8%81%E0%B8%B1%E0%B8%94/@12.889193,101.097962,19z/data=!4m6!3m5!1s0x3102e932f806a7d1:0xefbdea02e26c21ac!8m2!3d12.8893209!4d101.0981139!16s%2Fg%2F11s1_q54nk?hl=en-US&entry=ttu"
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-cyan-600 via-slate-800 to-gray-900 text-white pb-20">
+        <div className="min-h-screen bg-gradient-to-br from-cyan-600 via-slate-600 to-gray-900 text-white pb-20">
             {/* ---------- Banner Section ---------- */}
             <section className="relative w-full h-[60vh] sm:h-[70vh] lg:h-[80vh] overflow-hidden flex items-center justify-center">
                 {/* วิดีโอพื้นหลัง */}

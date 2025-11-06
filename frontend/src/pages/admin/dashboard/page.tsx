@@ -73,11 +73,11 @@ export default function DashboardPage() {
         const nextSummary: Summary =
           sumJson?.summary && typeof sumJson.summary === "object"
             ? {
-                job_applications: Number(sumJson.summary.job_applications ?? 0),
-                job_recruitments: Number(sumJson.summary.job_recruitments ?? 0),
-                questionnaires: Number(sumJson.summary.questionnaires ?? 0),
-                users: Number(sumJson.summary.users ?? 0),
-              }
+              job_applications: Number(sumJson.summary.job_applications ?? 0),
+              job_recruitments: Number(sumJson.summary.job_recruitments ?? 0),
+              questionnaires: Number(sumJson.summary.questionnaires ?? 0),
+              users: Number(sumJson.summary.users ?? 0),
+            }
             : summary;
 
         const nextApps: JobApplication[] = Array.isArray(appsJson)
@@ -222,25 +222,25 @@ export default function DashboardPage() {
                 <Skeleton />
               ) : (
                 <ResponsiveContainer width="100%" height="100%">
-  <PieChart>
-    <Pie
-      data={appsByStatus}
-      dataKey="value"
-      nameKey="name"
-      outerRadius={90}
-      label
-    >
-      {appsByStatus.map((_, i) => (
-        <Cell
-          key={i}
-          fill={COLORS[i % COLORS.length]} // เพิ่มสีตามลำดับ
-        />
-      ))}
-    </Pie>
-    <Tooltip />
-    <Legend />
-  </PieChart>
-</ResponsiveContainer>
+                  <PieChart>
+                    <Pie
+                      data={appsByStatus}
+                      dataKey="value"
+                      nameKey="name"
+                      outerRadius={90}
+                      label
+                    >
+                      {appsByStatus.map((_, i) => (
+                        <Cell
+                          key={i}
+                          fill={COLORS[i % COLORS.length]} // เพิ่มสีตามลำดับ
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
 
               )}
             </div>
@@ -337,8 +337,8 @@ function RecentTable({ apps }: { apps: JobApplication[] }) {
               <td className="py-2">
                 {a.created_at
                   ? new Date(
-                      (a.created_at as string).replace(" ", "T") + "+07:00"
-                    ).toLocaleString()
+                    (a.created_at as string).replace(" ", "T") + "+07:00"
+                  ).toLocaleString()
                   : "-"}
               </td>
             </tr>

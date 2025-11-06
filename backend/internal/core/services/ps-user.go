@@ -120,6 +120,7 @@ func (s *userService) GetProfileByCookieId(userID string) (models.UserReq, error
 		Username:  user.Username,
 		Email:     user.Email,
 		Status:    user.Status,
+		RoleName:  user.Role,
 	}
 
 	// เตรียมข้อมูล RoleName
@@ -152,6 +153,7 @@ func (s *userService) GetUserByID(userID string) (models.UserAdminReq, error) {
 		Email:     user.Email,
 		Password:  user.Password,
 		Status:    user.Status,
+		RoleName:  user.Role,
 	}
 
 	// เตรียมข้อมูล RoleName

@@ -11,10 +11,23 @@ body {
 .ant-select-selector, .ant-select-selection-item, .ant-input, .ant-typography,
 .ant-form-item-label, .ant-checkbox-wrapper > label,
 .ant-upload, .ant-tag, .ant-tag-checkable, .ant-tag-checkable-checked, .ant-badge,
-.ant-drawer {
+.ant-drawer, 
+/* --- Antd Table --- */
+.ant-table, .ant-table-wrapper, .ant-table-container,
+.ant-table-title, .ant-table-footer,
+.ant-table-thead, .ant-table-tbody,
+.ant-table-thead > tr > th,
+.ant-table-tbody > tr > td,
+.ant-table-cell,
+.ant-table-filter-trigger,
+.ant-table-filter-dropdown,
+.ant-table-pagination, .ant-pagination {
   font-family: 'Kanit', sans-serif !important;
 }
 
+.ant-table {
+  * { font-family: 'Kanit', sans-serif !important; }
+}
 
 .navbar-dropdown {
   background-color: #08a4b8 !important; 

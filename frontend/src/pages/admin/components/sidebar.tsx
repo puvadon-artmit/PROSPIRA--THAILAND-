@@ -2,10 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   HomeOutlined, UserOutlined, ReadOutlined, QuestionOutlined,
-  SettingOutlined, ProfileOutlined,
+  SettingOutlined, ProfileOutlined, AuditOutlined, MailOutlined
 } from "@ant-design/icons";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import logo_company from "../../../images/logo-company.png";
+import { useUserProfile } from "../../../hooks/useUserProfile";
+
 
 type NavItem = {
   key: string;
@@ -14,15 +16,31 @@ type NavItem = {
   to?: string;
   children?: NavItem[];
   badge?: number;
+  allow?: string[];          // รายชื่อ role ที่เห็นเมนูนี้ได้ (ถ้าไม่ใส่ = ใครก็เห็น)
+  hideIfNotAllowed?: boolean; // true=ซ่อน, false = แสดงแต่ disable (default: true)
 };
 
 const NAV_ITEMS: NavItem[] = [
   { key: "dashboard", label: "หน้าหลัก", icon: <HomeOutlined />, to: "/admin/dashboard" },
-  { key: "users", label: "ผู้ใช้งาน", icon: <UserOutlined />, to: "/admin/users" },
-  { key: "recruitment", label: "สอบถาม", icon: <QuestionOutlined />, to: "/admin/recruitment" },
-  { key: "news", label: "ข่าวสาร", icon: <ReadOutlined />, to: "/admin/news" },
+
+
+  { key: "recruitment", label: "การสรรหาบุคลากร", icon: <AuditOutlined />, to: "/admin/recruitment" },
+
+  { key: "job-application", label: "ใบสมัคร", icon: <MailOutlined />, to: "/admin/job-application" },
+
+  { key: "question", label: "สอบถาม", icon: <QuestionOutlined />, to: "/admin/question" },
+
+  { key: "news", label: "กิจกรรม", icon: <ReadOutlined />, to: "/admin/news" },
+
   { key: "content", label: "คอนเทนต์", icon: <ProfileOutlined />, to: "/admin/content" },
-  { key: "settings", label: "ตั้งค่า", icon: <SettingOutlined />, to: "/admin/settings" },
+ {
+    key: "users", label: "ผู้ใช้งาน", icon: <UserOutlined />, to: "/admin/manage-user",
+    allow: ["SU"], hideIfNotAllowed: true
+  },
+  {
+    key: "settings", label: "ตั้งค่า", icon: <SettingOutlined />, to: "/admin/settings",
+    allow: ["SU"], hideIfNotAllowed: true
+  },
 ];
 
 type SidebarProps = {
@@ -45,6 +63,13 @@ export default function Sidebar({
   const location = useLocation();
   const navigate = useNavigate();
   const isViewport = fit === "viewport";
+  const { user } = useUserProfile();
+
+  const hasAnyRole = (...roles: string[]) => {
+    if (!roles?.length) return true;
+    const r = user?.role_name?.toLowerCase();
+    return !!r && roles.some((x) => x.toLowerCase() === r);
+  };
 
   useEffect(() => {
     const apply = () => {
@@ -72,10 +97,10 @@ export default function Sidebar({
   const nq = norm(q);
   const filtered = nq
     ? NAV_ITEMS.filter(
-        (it) =>
-          norm(it.label).includes(nq) ||
-          (it.to && norm(it.to).includes(nq))
-      )
+      (it) =>
+        norm(it.label).includes(nq) ||
+        (it.to && norm(it.to).includes(nq))
+    )
     : NAV_ITEMS;
 
   const onSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -98,6 +123,13 @@ export default function Sidebar({
       </>
     );
   };
+
+  const visibleNav = filtered.filter((it) => {
+    if (!it.allow) return true;
+    if (it.hideIfNotAllowed ?? true) return hasAnyRole(...it.allow);
+
+    return true;
+  });
 
   return (
     <aside
@@ -172,58 +204,89 @@ export default function Sidebar({
           <div className="px-3 py-6 text-white/60 text-sm">ไม่พบเมนูที่ตรงกับ “{q}”</div>
         ) : (
           <ul className="flex flex-col gap-1.5">
-            {filtered.map((item) => {
+            {visibleNav.map((item) => {
               const active = item.to ? location.pathname.startsWith(item.to) : false;
+              const allowed = item.allow ? hasAnyRole(...item.allow) : true;
+              const disabled = item.allow && !allowed && (item.hideIfNotAllowed === false);
+
               return (
                 <li key={item.key} className="relative">
-                  <NavLink
-                    to={item.to || "#"}
-                    className={({ isActive }) =>
-                      [
-                        "group relative flex items-center gap-3 w-full py-2.5 px-3 rounded-xl",
-                        "transition-all duration-200 ease-out",
-                        "text-white/80 hover:text-white",
-                        active || isActive
-                          ? "bg-white/[0.08] ring-1 ring-white/15"
-                          : "hover:bg-white/[0.06] hover:ring-1 hover:ring-white/10",
-                        collapsed ? "justify-center" : "",
-                      ].join(" ")
-                    }
-                    onClick={() => setQ("")}
-                  >
-                    <span   
-                      className={[
-                        "absolute left-0 top-1/2 -translate-y-1/2 h-7 w-1 rounded-r-full",
-                        "bg-gradient-to-b from-cyan-400 to-emerald-400",
-                        active ? "opacity-100" : "opacity-0 group-hover:opacity-60",
-                        "transition-opacity",
-                      ].join(" ")}
-                    />
-                    <span
-                      className={[
-                        "text-[18px] flex-shrink-0",
-                        active ? "text-white" : "text-white/70 group-hover:text-white",
-                        "drop-shadow-[0_1px_6px_rgba(0,255,200,0.15)]",
-                      ].join(" ")}
+                  {item.to ? (
+                    <NavLink
+                      to={disabled ? "#" : item.to}
+                      onClick={(e) => {
+                        if (disabled) e.preventDefault();
+                        setQ("");
+                      }}
+                      className={({ isActive }) =>
+                        [
+                          "group relative flex items-center gap-3 w-full py-2.5 px-3 rounded-xl transition-all duration-200 ease-out",
+                          collapsed ? "justify-center" : "",
+                          disabled
+                            ? "opacity-50 pointer-events-none cursor-not-allowed"
+                            : "text-white/80 hover:text-white",
+                          active || isActive
+                            ? (disabled ? "bg-white/[0.05] ring-1 ring-white/10"
+                              : "bg-white/[0.08] ring-1 ring-white/15")
+                            : (disabled ? ""
+                              : "hover:bg-white/[0.06] hover:ring-1 hover:ring-white/10"),
+                        ].join(" ")
+                      }
+                      aria-disabled={disabled}
+                      title={disabled ? "ไม่มีสิทธิ์เข้าถึงเมนูนี้" : undefined}
                     >
-                      {item.icon}
-                    </span>
-                    {!collapsed && (
-                      <span className="flex-1 text-sm font-medium tracking-wide">
-                        <Highlight text={item.label} query={q} />
+                      {/* แถบซ้าย */}
+                      <span
+                        className={[
+                          "absolute left-0 top-1/2 -translate-y-1/2 h-7 w-1 rounded-r-full",
+                          "bg-gradient-to-b from-cyan-400 to-emerald-400",
+                          active ? "opacity-100" : "opacity-0 group-hover:opacity-60",
+                          "transition-opacity",
+                          disabled ? "opacity-0" : "",
+                        ].join(" ")}
+                      />
+                      {/* ไอคอน */}
+                      <span
+                        className={[
+                          "text-[18px] flex-shrink-0",
+                          active ? "text-white" : "text-white/70 group-hover:text-white",
+                          disabled ? "text-white/40" : "drop-shadow-[0_1px_6px_rgba(0,255,200,0.15)]",
+                        ].join(" ")}
+                      >
+                        {item.icon}
                       </span>
-                    )}
-                    {!collapsed && item.badge ? (
-                      <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-gradient-to-r from-rose-500/80 to-orange-400/80 text-white shadow">
-                        {item.badge}
-                      </span>
-                    ) : null}
-                    {collapsed && (
-                      <span className="absolute left-full ml-3 min-w-max rounded-md bg-black/80 text-white/95 text-xs py-1.5 px-2.5 shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none backdrop-blur">
-                        {item.label}
-                      </span>
-                    )}
-                  </NavLink>
+                      {/* ป้ายชื่อ */}
+                      {!collapsed && (
+                        <span className={["flex-1 text-sm font-medium tracking-wide", disabled ? "text-white/50" : ""].join(" ")}>
+                          <Highlight text={item.label} query={q} />
+                        </span>
+                      )}
+                      {/* badge */}
+                      {!collapsed && item.badge ? (
+                        <span className={[
+                          "text-[11px] font-semibold px-2 py-0.5 rounded-full",
+                          disabled ? "bg-white/10 text-white/60"
+                            : "bg-gradient-to-r from-rose-500/80 to-orange-400/80 text-white shadow",
+                        ].join(" ")}>
+                          {item.badge}
+                        </span>
+                      ) : null}
+                      {/* tooltip ตอนยุบ */}
+                      {collapsed && (
+                        <span className={[
+                          "absolute left-full ml-3 min-w-max rounded-md",
+                          "text-xs py-1.5 px-2.5 shadow-xl pointer-events-none backdrop-blur",
+                          disabled ? "bg-black/60 text-white/70" : "bg-black/80 text-white/95",
+                          "opacity-0 group-hover:opacity-100 transition-opacity",
+                        ].join(" ")}>
+                          {item.label}
+                        </span>
+                      )}
+                    </NavLink>
+                  ) : (
+                    // กรณีไม่มีเส้นทาง
+                    <div className="py-2.5 px-3 text-white/60">{item.label}</div>
+                  )}
                 </li>
               );
             })}

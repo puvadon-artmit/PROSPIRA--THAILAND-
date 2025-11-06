@@ -8,6 +8,7 @@ type UserResp struct {
 	Email     string `json:"email"`
 	Password  string `json:"password"`
 	Status    string `json:"status"`
+	Role      string `json:"role"`
 }
 
 type RoleInfo struct {
@@ -21,18 +22,18 @@ type UserReq struct {
 	Username  string `json:"username"`
 	Email     string `json:"email"`
 	Status    string `json:"status"`
-	// RoleName  []RoleInfo `json:"role"`
+	RoleName  string `json:"role_name"`
 }
 
 type UserAdminReq struct {
-	UserID    string     `json:"user_id"`
-	Firstname string     `json:"firstname"`
-	Lastname  string     `json:"lastname"`
-	Username  string     `json:"username"`
-	Email     string     `json:"email"`
-	Password  string     `json:"password"`
-	Status    string     `json:"status"`
-	RoleName  []RoleInfo `json:"role_name"`
+	UserID    string `json:"user_id"`
+	Firstname string `json:"firstname"`
+	Lastname  string `json:"lastname"`
+	Username  string `json:"username"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	Status    string `json:"status"`
+	RoleName  string `json:"role_name"`
 }
 
 type UserReqAll struct {

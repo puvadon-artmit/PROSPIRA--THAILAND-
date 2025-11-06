@@ -92,3 +92,38 @@ func (s *JobRecruitmentService) GetJobRecruitments(limit, offset int) ([]models.
 
 	return jobs, nil
 }
+
+func (s *JobRecruitmentService) UpdateJobRecruitmentWithMapService(jobRecruitmentID string, updates map[string]interface{}) error {
+	return s.jobRecruitmentRepo.UpdateJobRecruitmentWithMap(jobRecruitmentID, updates)
+}
+
+func (s *JobRecruitmentService) GetJobRecruitmentByIDService(jobRecruitmentID string) (models.JobRecruitmentReq, error) {
+	var out models.JobRecruitmentReq
+
+	query, err := s.jobRecruitmentRepo.GetJobRecruitmentByID(jobRecruitmentID)
+	if err != nil {
+		return out, err
+	}
+
+	var requirements []string
+	if len(query.Requirements) > 0 {
+		if err := json.Unmarshal(query.Requirements, &requirements); err != nil {
+			return out, fmt.Errorf("failed to unmarshal requirements: %w", err)
+		}
+	}
+
+	out = models.JobRecruitmentReq{
+		JobRecruitmentID: query.JobRecruitmentID,
+		Title:            query.Title,
+		Department:       query.Department,
+		Location:         query.Location,
+		Type:             query.Type,
+		Salary:           query.Salary,
+		Hot:              query.Hot,
+		Description:      query.Description,
+		Requirements:     requirements,
+		UsernameCreator:  query.UsernameCreator,
+	}
+
+	return out, nil
+}

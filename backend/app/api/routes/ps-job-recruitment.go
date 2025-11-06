@@ -22,5 +22,7 @@ func RoutesJobRecruitment(db *gorm.DB) *fiber.App {
 
 	app.Post("/create-job-recruitment", JobRecruitmentHandler.CreateJobRecruitmentHandler)
 	app.Get("/get-job-recruitments", JobRecruitmentHandler.GetJobRecruitmentsHandler)
+	app.Get("/get-job-recruitment/:job_recruitment_id", JobRecruitmentHandler.GetJobRecruitmentByIDHandler)
+	app.Put("/update-job-recruitment/:job_recruitment_id", JobRecruitmentHandler.UpdateJobRecruitmentWithMapHandler)
 	return app
 }

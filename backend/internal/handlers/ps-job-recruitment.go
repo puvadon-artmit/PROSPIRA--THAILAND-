@@ -56,3 +56,45 @@ func (h *JobRecruitmentHandler) GetJobRecruitmentsHandler(c *fiber.Ctx) error {
 
 	return c.JSON(jobs)
 }
+
+func (h *JobRecruitmentHandler) GetJobRecruitmentByIDHandler(c *fiber.Ctx) error {
+	jobRecruitmentID := c.Params("job_recruitment_id")
+
+	job, err := h.JobRecruitmentSrv.GetJobRecruitmentByIDService(jobRecruitmentID)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to retrieve job recruitment",
+		})
+	}
+
+	return c.JSON(job)
+}
+
+func (h *JobRecruitmentHandler) UpdateJobRecruitmentWithMapHandler(c *fiber.Ctx) error {
+	jobRecruitmentID := c.Params("job_recruitment_id")
+	var updates map[string]interface{}
+
+	if err := c.BodyParser(&updates); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid request payload",
+		})
+	}
+
+	if h.JobRecruitmentSrv == nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Service is not available",
+		})
+	}
+
+	err := h.JobRecruitmentSrv.UpdateJobRecruitmentWithMapService(jobRecruitmentID, updates)
+	if err != nil {
+		log.Println("Error updating job recruitment:", err)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to update job recruitment",
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "Job recruitment updated successfully",
+	})
+}

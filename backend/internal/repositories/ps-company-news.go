@@ -15,9 +15,9 @@ type CompanyNewsRepositoryDB struct {
 }
 
 func NewCompanyNewsRepositoryDB(db *gorm.DB) ports.CompanyNewsRepository {
-	if err := db.AutoMigrate(&domains.CompanyNews{}); err != nil {
-		fmt.Printf("failed to auto migrate: %v", err)
-	}
+	// if err := db.AutoMigrate(&domains.CompanyNews{}); err != nil {
+	// 	fmt.Printf("failed to auto migrate: %v", err)
+	// }
 	return &CompanyNewsRepositoryDB{db: db}
 }
 

@@ -3,8 +3,11 @@ package repositories
 import (
 	"backend/internal/core/domains"
 	ports "backend/internal/core/ports/repositories"
+	"backend/internal/pkgs/utils"
+	"encoding/json"
 	"fmt"
 
+	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
 
@@ -55,6 +58,22 @@ func (r *JobRecruitmentRepositoryDB) GetJobRecruitments(limit, offset int) ([]do
 }
 
 func (r *JobRecruitmentRepositoryDB) UpdateJobRecruitmentWithMap(jobRecruitmentID string, updates map[string]interface{}) error {
+	if v, ok := updates["requirements"]; ok {
+		arr, err := utils.ToStringSlice(v)
+		if err != nil {
+			return err
+		}
+		b, err := json.Marshal(arr)
+		if err != nil {
+			return fmt.Errorf("marshal requirements: %w", err)
+		}
+		updates["requirements"] = datatypes.JSON(b)
+	}
+
+	if len(updates) == 0 {
+		return nil
+	}
+
 	return r.db.Model(&domains.JobRecruitment{}).
 		Where("job_recruitment_id = ?", jobRecruitmentID).
 		Updates(updates).

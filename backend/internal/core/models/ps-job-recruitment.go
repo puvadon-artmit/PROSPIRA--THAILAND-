@@ -16,6 +16,14 @@ type JobRecruitmentReq struct {
 	DeletedAt        string   `json:"deleted_at"`
 }
 
+type JobRecruitmentListResp struct {
+	Total      int64               `json:"total"`
+	TotalPages int                 `json:"total_pages"`
+	Limit      int                 `json:"limit"`
+	Offset     int                 `json:"offset"`
+	Data       []JobRecruitmentReq `json:"data"`
+}
+
 type JobRecruitmentResp struct {
 	JobRecruitmentID string   `json:"job_recruitment_id"`
 	Title            string   `json:"title"`

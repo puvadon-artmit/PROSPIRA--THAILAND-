@@ -58,7 +58,7 @@ export default function CompanyMenu({ isCompanyPage, lang }: { isCompanyPage?: b
   ];
 
   const vision: Item[] = [
-    { key: "3", label: "วิสัยทัศน์และพันธกิจ", href: withLang(lang, "/vision"), desc: "ทิศทางและเป้าหมายองค์กร" },
+    { key: "3", label: "วิสัยทัศน์และพันธกิจ", href: withLang(lang, "/business-policy"), desc: "ทิศทางและเป้าหมายองค์กร" },
     { key: "4", label: "จุดแข็งของเรา", href: withLang(lang, "/our-strengths"), desc: "จุดแข็งของเรา" },
   ];
 
