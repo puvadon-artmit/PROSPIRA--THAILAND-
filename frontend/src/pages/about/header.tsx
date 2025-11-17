@@ -1,7 +1,7 @@
 import logo_company from "../../images/logo-company.png";
 import "../../css/job-header.css";
 // import { useTranslation } from 'react-i18next';
-import team from "../../images/about/blog-corp-team-1200px-630px-72dpi.webp";
+import team from "../../images/about/PSTH_Bird eyes view II.jpg";
 
 export default function Header() {
   // const { t } = useTranslation();
@@ -18,9 +18,11 @@ export default function Header() {
 
         <div className="relative h-full flex flex-col items-center justify-center text-white text-center px-6 z-10">
           <div className="relative max-w-6xl mx-auto text-center z-10">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-[#08a4b8] backdrop-blur-sm rounded-2xl mb-4 shadow-2xl hover:scale-110 transition-transform">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-md border border-white/20 rounded-2xl mb-4 shadow-2xl hover:scale-110 transition-transform">
               <img src={logo_company} alt="logo" className="w-[80%] h-[80%] object-contain" />
             </div>
+
+            
 
             <h1 className="text-4xl md:text-6xl font-extrabold mb-4 text-white drop-shadow-2xl">
               เกี่ยวกับเรา

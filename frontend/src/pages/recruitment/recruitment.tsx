@@ -1,8 +1,7 @@
 import team from "../../images/recruitment/Header_img_1.webp";
-import type { Job } from '../../types/job';
 import { useTranslation } from 'react-i18next';
 
-export default function RecruitmentHeader({ jobs }: { jobs: Job[] } ) {
+export default function RecruitmentHeader() {
   const { t } = useTranslation();
   return (
     <section className="relative bg-white overflow-hidden">
@@ -31,22 +30,7 @@ export default function RecruitmentHeader({ jobs }: { jobs: Job[] } ) {
           </p>
 
           {/* Stats */}
-          <div className="flex items-center gap-8 pt-4">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-600">500+</div>
-              <div className="text-sm text-gray-600">{t("stat_employees_label")}</div>
-            </div>
-            <div className="w-px h-12 bg-gray-200"></div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-600">5+</div>
-              <div className="text-sm text-gray-600">{t("stat_experience_label")}</div>
-            </div>
-            <div className="w-px h-12 bg-gray-200"></div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-600">{jobs.length}</div>
-              <div className="text-sm text-gray-600">{t("stat_jobs_label")}</div>
-            </div>
-          </div>
+       
         </div>
 
         <div className="relative flex-1 max-w-md md:max-w-lg">

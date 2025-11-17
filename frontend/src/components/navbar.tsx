@@ -10,12 +10,11 @@ import { Dropdown } from 'antd';
 import type { MenuProps } from 'antd';
 import ProductInformation from "./product-information";
 
-type Lang = 'th' | 'en' | 'zh';
+type Lang = 'th' | 'en';
 
 const labelMap: Record<Lang, string> = {
   th: 'ไทย',
   en: 'English',
-  zh: '中文',
 };
 
 const Navbar: React.FC = () => {
@@ -62,7 +61,6 @@ const Navbar: React.FC = () => {
   const langItems: MenuProps['items'] = [
   { key: 'th', label: 'ไทย' },
   { key: 'en', label: 'English' },
-  { key: 'zh', label: '中文' },
 ];
 
 const onLangClick: MenuProps['onClick'] = ({ key }) => {

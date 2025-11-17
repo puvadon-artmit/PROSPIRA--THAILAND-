@@ -14,6 +14,7 @@ var NewCorsMiddleware = cors.New(cors.Config{
 		"http://localhost:3001",
 		"http://localhost:5173",
 		"http://localhost:13002",
+		"http://localhost:5174",
 
 		// IP/port ภายใน
 		"http://10.0.98.208",
@@ -26,6 +27,7 @@ var NewCorsMiddleware = cors.New(cors.Config{
 		"http://prospira.th.com",
 		"https://prospira.th.com",
 		"http://10.144.1.103",
+		"https://www.prospira.co.th",
 	}, ","),
 
 	AllowMethods: strings.Join([]string{

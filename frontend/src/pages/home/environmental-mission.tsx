@@ -1,6 +1,6 @@
 import team from "../../images/home/environmental-bar.png";
 import styles from "../../css/our-strengths.module.css";
-import DataES from "../../images/home/environmental.png";
+import Tree from "../../images/home/environmental-tree-world.png";
 import { useTranslation } from "react-i18next";
 
 export default function EnvironmentalMission() {
@@ -28,7 +28,6 @@ export default function EnvironmentalMission() {
                 </div>
             </div>
 
-
             <div className="flex flex-col md:flex-row items-center justify-between gap-8 px-8 sm:px-12 md:px-24 lg:px-4 z-10 max-w-7xl mx-auto py-20">
                 <div className="flex-1 ">
                     <h1 className="text-4xl md:text-5xl font-bold mb-6 drop-shadow-2xl text-black">
@@ -44,8 +43,8 @@ export default function EnvironmentalMission() {
                   
 
                       <img
-                        src={DataES}
-                        className="w-full h-auto object-contain"
+                        src={Tree}
+                        className="w-full h-auto object-contain rounded-lg"
                         alt={t("content_title_3")}
                     />
                 </div>

@@ -126,7 +126,7 @@ export default function JobRecruitment() {
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
-      <RecruitmentHeader jobs={jobs} />
+      <RecruitmentHeader />
       <div className="max-w-[80rem] mx-auto px-4 sm:px-0 py-6">
         <div className="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="flex-1 overflow-x-auto sm:overflow-visible">
@@ -262,7 +262,7 @@ export default function JobRecruitment() {
             {selectedJob ? (
               <>
                 {/* Header Section */}
-                <div className="bg-gradient-to-r from-[#08a4b8] to-cyan-600 px-8 py-6">
+                <div className="bg-gradient-to-r from-[#08a4b8]/80 to-cyan-600/80 px-8 py-6">
                   <h2 className="text-3xl font-bold text-white drop-shadow-lg">
                     {selectedJob.title}
                   </h2>

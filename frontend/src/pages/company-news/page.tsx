@@ -1,13 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useLayoutEffect } from "react";
 import { CalendarOutlined, RightOutlined } from "@ant-design/icons";
 import { useSearchParams, useLocation } from "react-router-dom";
 import { buildImageURL } from "../../../utils/get-image";
 import { Link } from "react-router-dom";
 import type { NewsItemApi, RelatedNews } from "../../types/company-news";
-// import { InstagramOutlined, FacebookOutlined, XOutlined } from "@ant-design/icons";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSanitize from "rehype-sanitize";
+import withLang from "../../../utils/normalize-lang";
 
 function isAbortError(e: unknown): e is DOMException {
     return e instanceof DOMException && e.name === "AbortError";
@@ -36,6 +36,13 @@ export default function CompanyNewsPage() {
     const titleFromQuery = sp.get("title")
 
     const base = import.meta.env.VITE_API_BASE_URL;
+
+    useLayoutEffect(() => {
+        if ("scrollRestoration" in window.history) {
+            window.history.scrollRestoration = "manual";
+        }
+        window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    }, []);
 
     const apiURL = useMemo(() => {
         if (titleFromQuery) {
@@ -168,56 +175,26 @@ export default function CompanyNewsPage() {
                                         {data.title}
                                     </h1>
 
-                                             <ReactMarkdown 
-                                            remarkPlugins={[remarkGfm]}
-                                            rehypePlugins={[rehypeSanitize]}
-                                            components={{
-                                                h1: (props) => <h1 className="text-3xl font-bold mt-6 mb-4" {...props} />,
-                                                h2: (props) => <h2 className="text-2xl font-semibold mt-5 mb-3" {...props} />,
-                                                ul: (props) => <ul className="list-disc ms-6 my-3" {...props} />,
-                                                ol: (props) => <ol className="list-decimal ms-6 my-3" {...props} />,
-                                                a: ({children, ...props}) => (
+                                    <ReactMarkdown
+                                        remarkPlugins={[remarkGfm]}
+                                        rehypePlugins={[rehypeSanitize]}
+                                        components={{
+                                            h1: (props) => <h1 className="text-3xl font-bold mt-6 mb-4" {...props} />,
+                                            h2: (props) => <h2 className="text-2xl font-semibold mt-5 mb-3" {...props} />,
+                                            ul: (props) => <ul className="list-disc ms-6 my-3" {...props} />,
+                                            ol: (props) => <ol className="list-decimal ms-6 my-3" {...props} />,
+                                            a: ({ children, ...props }) => (
                                                 <a {...props} target="_blank" rel="noopener noreferrer" className="text-cyan-700 underline">
                                                     {children}
                                                 </a>
-                                                ),
-                                            }}
-                                            >
-                                            {data.content}
-                                            </ReactMarkdown>
-
-                                    {/* Share */}
-                                    {/* <div className="mt-8 sm:mt-10 lg:mt-12 pt-6 sm:pt-8 border-t border-gray-200">
-                                        <p className="text-xs sm:text-sm font-medium text-gray-500 mb-2 sm:mb-3">
-                                            แชร์บทความนี้
-                                        </p>
-                                        <div className="flex gap-2 sm:gap-3">
-                                            <button
-                                                aria-label="แชร์ไปที่ Facebook"
-                                                className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg"
-                                            >
-                                                <FacebookOutlined style={{ color: "white" }} className="text-base sm:text-lg" />
-                                            </button>
-
-                                            <button
-                                                aria-label="แชร์ไปที่ Instagram"
-                                                className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#E1306C] hover:bg-[#E1306C]/80 text-white flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg"
-                                            >
-                                                <InstagramOutlined style={{ color: "white" }} className="text-base sm:text-lg" />
-                                            </button>
-
-                                            <button
-                                                aria-label="แชร์ไปที่ X"
-                                                className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black hover:bg-black/80 text-white flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-lg"
-                                            >
-                                                <XOutlined style={{ color: "white" }} className="text-base sm:text-lg" />
-                                            </button>
-                                        </div>
-                                    </div> */}
+                                            ),
+                                        }}
+                                    >
+                                        {data.content}
+                                    </ReactMarkdown>
                                 </div>
                             </div>
                         </article>
-
 
                         {/* Sidebar - Related News */}
                         <aside className="lg:col-span-1">
@@ -261,7 +238,7 @@ export default function CompanyNewsPage() {
                                     </div>
 
                                     <a
-                                        href="/news"
+                                        href={`${withLang(lang, "/all-activities")}`}
                                         className="group mt-6 w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-[#08a4b8] to-[#06b6d4] text-white font-bold shadow-lg hover:shadow-xl hover:from-black hover:to-black transition-all duration-300"
                                     >
                                         <span>ดูกิจกรรมทั้งหมด</span>
@@ -269,20 +246,6 @@ export default function CompanyNewsPage() {
                                     </a>
                                 </div>
 
-                                {/* Quick Info Card */}
-                                {/* <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl p-6 text-black">
-                                    <h3 className="text-lg font-bold mb-3">ติดตามกิจกรรมสาร</h3>
-                                    <p className="text-sm leading-relaxed mb-4 text-black">
-                                        อัพเดทกิจกรรมสารและกิจกรรมล่าสุดของบริษัทได้ที่หน้ากิจกรรมของเรา
-                                    </p>
-                                    <a
-                                        href="/news"
-                                        className="inline-flex items-center gap-2 text-sm font-semibold text-black hover:text-cyan-100 transition-colors duration-300"
-                                    >
-                                        <span>เยี่ยมชมหน้ากิจกรรม</span>
-                                        <RightOutlined />
-                                    </a>
-                                </div> */}
                             </div>
                         </aside>
                     </div>
