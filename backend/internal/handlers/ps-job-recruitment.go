@@ -1,11 +1,12 @@
 package handlers
 
 import (
-	"backend/internal/core/models"
-	services "backend/internal/core/ports/services"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
+
+	"backend/internal/core/models"
+	services "backend/internal/core/ports/services"
 )
 
 type JobRecruitmentHandler struct {
@@ -96,5 +97,34 @@ func (h *JobRecruitmentHandler) UpdateJobRecruitmentWithMapHandler(c *fiber.Ctx)
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "Job recruitment updated successfully",
+	})
+}
+
+func (h *JobRecruitmentHandler) DeleteJobRecruitmentHandler(c *fiber.Ctx) error {
+	jobRecruitmentID := c.Params("job_recruitment_id")
+	log.Printf("[DeleteJobRecruitmentHandler] Received ID: %s\n", jobRecruitmentID)
+
+	if jobRecruitmentID == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Job recruitment ID is required",
+		})
+	}
+
+	if h.JobRecruitmentSrv == nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Service is not available",
+		})
+	}
+
+	err := h.JobRecruitmentSrv.DeleteJobRecruitmentService(jobRecruitmentID)
+	if err != nil {
+		log.Printf("[DeleteJobRecruitmentHandler] Error: %v\n", err)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to delete job recruitment",
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "Job recruitment deleted successfully",
 	})
 }

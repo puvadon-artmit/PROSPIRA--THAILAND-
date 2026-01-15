@@ -1,16 +1,17 @@
 package services
 
 import (
-	"backend/internal/core/domains"
-	"backend/internal/core/models"
-	ports "backend/internal/core/ports/repositories"
-	servicesports "backend/internal/core/ports/services"
-	"backend/internal/pkgs/logs"
 	"fmt"
 	"log"
 	"time"
 
 	"github.com/google/uuid"
+
+	"backend/internal/core/domains"
+	"backend/internal/core/models"
+	ports "backend/internal/core/ports/repositories"
+	servicesports "backend/internal/core/ports/services"
+	"backend/internal/pkgs/logs"
 )
 
 type CompanyNewsService struct {
@@ -25,7 +26,7 @@ func (s *CompanyNewsService) CreateCompanyNewsService(req models.CompanyNewsResp
 	newID := uuid.New()
 
 	domainISR := domains.CompanyNews{
-		CompanyNewsID:    newID.String(),
+		CompanyNewsID:    newID,
 		CompanyNewsPhoto: req.CompanyNewsPhoto,
 		Title:            req.Title,
 		Content:          req.Content,
@@ -76,6 +77,8 @@ func (s *CompanyNewsService) GetCompanyNews(limit, offset int) (models.CompanyNe
 		})
 	}
 
+	// fmt.Println("CompanyNewsID : ", jobs)
+
 	totalPages := 0
 	if total > 0 {
 		totalPages = int((total + int64(limit) - 1) / int64(limit))
@@ -108,4 +111,85 @@ func (s *CompanyNewsService) GetCompanyNewsByTitle(title string) (models.Company
 	}
 
 	return jobReq, nil
+}
+
+func (s *CompanyNewsService) UpdateCompanyNewsService(companyNewsID string, req models.CompanyNewsResp) error {
+	log.Printf("[UpdateCompanyNewsService] Starting update for ID: %s\n", companyNewsID)
+	log.Printf("[UpdateCompanyNewsService] Request data: %+v\n", req)
+
+	if companyNewsID == "" {
+		log.Println("[UpdateCompanyNewsService] Company news ID is empty!")
+		return fmt.Errorf("company news ID is required")
+	}
+
+	if s.companyNewsRepo == nil {
+		log.Println("[UpdateCompanyNewsService] CompanyNewsRepo is nil")
+		return fmt.Errorf("company news repository is not initialized")
+	}
+
+	// Build update map with only provided fields
+	updates := make(map[string]interface{})
+
+	if req.CompanyNewsPhoto != "" {
+		log.Printf("[UpdateCompanyNewsService] Setting company_news_photo: %s\n", req.CompanyNewsPhoto)
+		updates["company_news_photo"] = req.CompanyNewsPhoto
+	}
+	if req.Title != "" {
+		log.Printf("[UpdateCompanyNewsService] Setting title: %s\n", req.Title)
+		updates["title"] = req.Title
+	}
+	if req.Content != "" {
+		log.Printf("[UpdateCompanyNewsService] Setting content: %s\n", req.Content)
+		updates["content"] = req.Content
+	}
+	if req.Category != "" {
+		log.Printf("[UpdateCompanyNewsService] Setting category: %s\n", req.Category)
+		updates["category"] = req.Category
+	}
+	if req.UsernameCreator != "" {
+		log.Printf("[UpdateCompanyNewsService] Setting username_creator: %s\n", req.UsernameCreator)
+		updates["username_creator"] = req.UsernameCreator
+	}
+
+	if len(updates) == 0 {
+		log.Println("[UpdateCompanyNewsService] No fields to update - all provided values are empty!")
+		return fmt.Errorf("no fields to update")
+	}
+
+	log.Printf("[UpdateCompanyNewsService] Total fields to update: %d\n", len(updates))
+	log.Printf("[UpdateCompanyNewsService] Updates map: %+v\n", updates)
+
+	err := s.companyNewsRepo.UpdateCompanyNewsWithMap(companyNewsID, updates)
+	if err != nil {
+		log.Printf("[UpdateCompanyNewsService] Repository error: %v\n", err)
+		logs.Error(err)
+		return fmt.Errorf("failed to update company news: %w", err)
+	}
+
+	log.Println("[UpdateCompanyNewsService] Update completed successfully")
+	return nil
+}
+
+func (s *CompanyNewsService) DeleteCompanyNewsService(companyNewsID string) error {
+	log.Printf("[DeleteCompanyNewsService] Starting delete for ID: %s\n", companyNewsID)
+
+	if companyNewsID == "" {
+		log.Println("[DeleteCompanyNewsService] Company news ID is empty!")
+		return fmt.Errorf("company news ID is required")
+	}
+
+	if s.companyNewsRepo == nil {
+		log.Println("[DeleteCompanyNewsService] CompanyNewsRepo is nil")
+		return fmt.Errorf("company news repository is not initialized")
+	}
+
+	err := s.companyNewsRepo.DeleteCompanyNews(companyNewsID)
+	if err != nil {
+		log.Printf("[DeleteCompanyNewsService] Repository error: %v\n", err)
+		logs.Error(err)
+		return fmt.Errorf("failed to delete company news: %w", err)
+	}
+
+	log.Println("[DeleteCompanyNewsService] Delete completed successfully")
+	return nil
 }

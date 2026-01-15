@@ -1,10 +1,10 @@
 package repositories
 
 import (
+	"gorm.io/gorm"
+
 	"backend/internal/core/domains"
 	ports "backend/internal/core/ports/repositories"
-
-	"gorm.io/gorm"
 )
 
 func NewDashboardRepositoryDB(db *gorm.DB) ports.DashboardRepository {

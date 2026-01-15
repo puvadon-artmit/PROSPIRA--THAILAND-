@@ -1,17 +1,18 @@
 package services
 
 import (
-	"backend/internal/core/domains"
-	"backend/internal/core/models"
-	ports "backend/internal/core/ports/repositories"
-	servicesports "backend/internal/core/ports/services"
-	"backend/internal/pkgs/logs"
 	"encoding/json"
 	"fmt"
 	"log"
 	"time"
 
 	"github.com/google/uuid"
+
+	"backend/internal/core/domains"
+	"backend/internal/core/models"
+	ports "backend/internal/core/ports/repositories"
+	servicesports "backend/internal/core/ports/services"
+	"backend/internal/pkgs/logs"
 )
 
 type JobRecruitmentService struct {
@@ -91,6 +92,8 @@ func (s *JobRecruitmentService) GetJobRecruitments(limit, offset int) ([]models.
 		jobs = append(jobs, jobReq)
 	}
 
+	// fmt.Println("JobRecruitmentID : ", jobs)
+
 	return jobs, nil
 }
 
@@ -127,4 +130,28 @@ func (s *JobRecruitmentService) GetJobRecruitmentByIDService(jobRecruitmentID st
 	}
 
 	return out, nil
+}
+
+func (s *JobRecruitmentService) DeleteJobRecruitmentService(jobRecruitmentID string) error {
+	log.Printf("[DeleteJobRecruitmentService] Starting delete for ID: %s\n", jobRecruitmentID)
+
+	if jobRecruitmentID == "" {
+		log.Println("[DeleteJobRecruitmentService] Job recruitment ID is empty!")
+		return fmt.Errorf("job recruitment ID is required")
+	}
+
+	if s.jobRecruitmentRepo == nil {
+		log.Println("[DeleteJobRecruitmentService] JobRecruitmentRepo is nil")
+		return fmt.Errorf("job recruitment repository is not initialized")
+	}
+
+	err := s.jobRecruitmentRepo.DeleteJobRecruitment(jobRecruitmentID)
+	if err != nil {
+		log.Printf("[DeleteJobRecruitmentService] Repository error: %v\n", err)
+		logs.Error(err)
+		return fmt.Errorf("failed to delete job recruitment: %w", err)
+	}
+
+	log.Println("[DeleteJobRecruitmentService] Delete completed successfully")
+	return nil
 }

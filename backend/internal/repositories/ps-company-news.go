@@ -1,13 +1,14 @@
 package repositories
 
 import (
-	"backend/internal/core/domains"
-	ports "backend/internal/core/ports/repositories"
 	"fmt"
-	"strings"
 	"time"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
+
+	"backend/internal/core/domains"
+	ports "backend/internal/core/ports/repositories"
 )
 
 type CompanyNewsRepositoryDB struct {
@@ -33,7 +34,7 @@ func (r *CompanyNewsRepositoryDB) CreateCompanyNews(n *domains.CompanyNews) erro
 	const q = `
 	INSERT INTO company_news
 		(company_news_id, company_news_photo, title, content, category, username_creator, created_at, updated_at)
-	OUTPUT INSERTED.company_news_id, INSERTED.created_at, INSERTED.updated_at
+	OUTPUT CONVERT(NVARCHAR(36), INSERTED.company_news_id) AS company_news_id, INSERTED.created_at, INSERTED.updated_at
 	VALUES
 		(NEWID(), ?, ?, ?, ?, ?, ?, ?);
 `
@@ -61,7 +62,13 @@ func (r *CompanyNewsRepositoryDB) CreateCompanyNews(n *domains.CompanyNews) erro
 		return err
 	}
 
-	n.CompanyNewsID = out.CompanyNewsID
+	id, err := uuid.Parse(out.CompanyNewsID)
+	if err != nil {
+		fmt.Printf("failed to parse company news id: %v\n", err)
+		return err
+	}
+
+	n.CompanyNewsID = id
 	n.CreatedAt = out.CreatedAt
 	n.UpdatedAt = out.UpdatedAt
 	return nil
@@ -85,16 +92,48 @@ func (r *CompanyNewsRepositoryDB) GetCompanyNewsByID(companyNewsID string) (doma
 
 func (r *CompanyNewsRepositoryDB) GetAllCompanyNews() ([]domains.CompanyNews, error) {
 	const q = `
-		SELECT company_news_id, company_news_photo, title, content, category,
+		SELECT CONVERT(NVARCHAR(36), company_news_id) AS company_news_id, 
+		       company_news_photo, title, content, category,
 		       username_creator, created_at, updated_at
 		FROM company_news
 		ORDER BY created_at DESC;
 	`
 
-	var list []domains.CompanyNews
-	if err := r.db.Raw(q).Scan(&list).Error; err != nil {
+	type companyNewsRow struct {
+		CompanyNewsID    string    `gorm:"column:company_news_id"`
+		CompanyNewsPhoto string    `gorm:"column:company_news_photo"`
+		Title            string    `gorm:"column:title"`
+		Content          string    `gorm:"column:content"`
+		Category         string    `gorm:"column:category"`
+		UsernameCreator  string    `gorm:"column:username_creator"`
+		CreatedAt        time.Time `gorm:"column:created_at"`
+		UpdatedAt        time.Time `gorm:"column:updated_at"`
+	}
+
+	var rows []companyNewsRow
+	if err := r.db.Raw(q).Scan(&rows).Error; err != nil {
 		return nil, err
 	}
+
+	list := make([]domains.CompanyNews, 0, len(rows))
+	for _, row := range rows {
+		id, err := uuid.Parse(row.CompanyNewsID)
+		if err != nil {
+			fmt.Printf("GetAllCompanyNews parse UUID error: %v\n", err)
+			continue
+		}
+		list = append(list, domains.CompanyNews{
+			CompanyNewsID:    id,
+			CompanyNewsPhoto: row.CompanyNewsPhoto,
+			Title:            row.Title,
+			Content:          row.Content,
+			Category:         row.Category,
+			UsernameCreator:  row.UsernameCreator,
+			CreatedAt:        row.CreatedAt,
+			UpdatedAt:        row.UpdatedAt,
+		})
+	}
+
 	return list, nil
 }
 
@@ -115,7 +154,8 @@ func (r *CompanyNewsRepositoryDB) GetCompanyNews(limit, offset int) ([]domains.C
 	}
 
 	const q = `
-        SELECT company_news_id, company_news_photo, title, content, category,
+        SELECT CONVERT(NVARCHAR(36), company_news_id) AS company_news_id, 
+               company_news_photo, title, content, category,
                username_creator, created_at, updated_at
         FROM company_news
         ORDER BY created_at DESC
@@ -123,52 +163,50 @@ func (r *CompanyNewsRepositoryDB) GetCompanyNews(limit, offset int) ([]domains.C
         FETCH NEXT ? ROWS ONLY;
     `
 
-	var list []domains.CompanyNews
-	if err := r.db.Raw(q, offset, limit).Scan(&list).Error; err != nil {
+	type companyNewsRow struct {
+		CompanyNewsID    string    `gorm:"column:company_news_id"`
+		CompanyNewsPhoto string    `gorm:"column:company_news_photo"`
+		Title            string    `gorm:"column:title"`
+		Content          string    `gorm:"column:content"`
+		Category         string    `gorm:"column:category"`
+		UsernameCreator  string    `gorm:"column:username_creator"`
+		CreatedAt        time.Time `gorm:"column:created_at"`
+		UpdatedAt        time.Time `gorm:"column:updated_at"`
+	}
+
+	var rows []companyNewsRow
+	if err := r.db.Raw(q, offset, limit).Scan(&rows).Error; err != nil {
 		fmt.Printf("GetCompanyNews list error: %v\n", err)
 		return nil, 0, err
+	}
+
+	list := make([]domains.CompanyNews, 0, len(rows))
+	for _, row := range rows {
+		id, err := uuid.Parse(row.CompanyNewsID)
+		if err != nil {
+			fmt.Printf("GetCompanyNews parse UUID error: %v\n", err)
+			continue
+		}
+		list = append(list, domains.CompanyNews{
+			CompanyNewsID:    id,
+			CompanyNewsPhoto: row.CompanyNewsPhoto,
+			Title:            row.Title,
+			Content:          row.Content,
+			Category:         row.Category,
+			UsernameCreator:  row.UsernameCreator,
+			CreatedAt:        row.CreatedAt,
+			UpdatedAt:        row.UpdatedAt,
+		})
 	}
 
 	return list, total, nil
 }
 
 func (r *CompanyNewsRepositoryDB) UpdateCompanyNewsWithMap(companyNewsID string, updates map[string]interface{}) error {
-	if len(updates) == 0 {
-		return nil
-	}
-
-	allowed := map[string]bool{
-		"company_news_photo": true,
-		"title":              true,
-		"content":            true,
-		"category":           true,
-		"username_creator":   true,
-	}
-
-	setParts := make([]string, 0, len(updates)+1)
-	args := make([]interface{}, 0, len(updates)+2)
-	argIdx := 1
-
-	for k, v := range updates {
-		if !allowed[k] {
-			continue
-		}
-		setParts = append(setParts, k+" = $"+fmt.Sprint(argIdx))
-		args = append(args, v)
-		argIdx++
-	}
-
-	if len(setParts) == 0 {
-		return nil
-	}
-
-	setParts = append(setParts, "updated_at = NOW()")
-
-	q := "UPDATE company_news SET " + strings.Join(setParts, ", ") + " WHERE company_news_id = $" + fmt.Sprint(argIdx) + ";"
-
-	args = append(args, companyNewsID)
-
-	if err := r.db.Exec(q, args...).Error; err != nil {
+	if err := r.db.Model(&domains.CompanyNews{}).
+		Where("company_news_id = ?", companyNewsID).
+		Updates(updates).Error; err != nil {
+		fmt.Printf("UpdateMeetingRoomWithMap error: %v\n", err)
 		return err
 	}
 	return nil
@@ -186,7 +224,7 @@ func (r *CompanyNewsRepositoryDB) GetCompanyNewsCount() (int64, error) {
 func (r *CompanyNewsRepositoryDB) GetCompanyNewsByTitle(title string) (domains.CompanyNews, error) {
 	const q = `
 		SELECT TOP 1
-			company_news_id,
+			CONVERT(NVARCHAR(36), company_news_id) AS company_news_id,
 			company_news_photo,
 			title,
 			content,
@@ -199,9 +237,47 @@ func (r *CompanyNewsRepositoryDB) GetCompanyNewsByTitle(title string) (domains.C
 		ORDER BY created_at DESC;
 	`
 
-	var row domains.CompanyNews
+	type companyNewsRow struct {
+		CompanyNewsID    string    `gorm:"column:company_news_id"`
+		CompanyNewsPhoto string    `gorm:"column:company_news_photo"`
+		Title            string    `gorm:"column:title"`
+		Content          string    `gorm:"column:content"`
+		Category         string    `gorm:"column:category"`
+		UsernameCreator  string    `gorm:"column:username_creator"`
+		CreatedAt        time.Time `gorm:"column:created_at"`
+		UpdatedAt        time.Time `gorm:"column:updated_at"`
+	}
+
+	var row companyNewsRow
 	if err := r.db.Debug().Raw(q, title).Scan(&row).Error; err != nil {
 		return domains.CompanyNews{}, err
 	}
-	return row, nil
+
+	id, err := uuid.Parse(row.CompanyNewsID)
+	if err != nil {
+		return domains.CompanyNews{}, fmt.Errorf("failed to parse UUID: %w", err)
+	}
+
+	return domains.CompanyNews{
+		CompanyNewsID:    id,
+		CompanyNewsPhoto: row.CompanyNewsPhoto,
+		Title:            row.Title,
+		Content:          row.Content,
+		Category:         row.Category,
+		UsernameCreator:  row.UsernameCreator,
+		CreatedAt:        row.CreatedAt,
+		UpdatedAt:        row.UpdatedAt,
+	}, nil
+}
+
+func (r *CompanyNewsRepositoryDB) DeleteCompanyNews(companyNewsID string) error {
+	result := r.db.Where("company_news_id = ?", companyNewsID).Delete(&domains.CompanyNews{})
+	if result.Error != nil {
+		fmt.Printf("DeleteCompanyNews error: %v\n", result.Error)
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return fmt.Errorf("company news with ID %s not found", companyNewsID)
+	}
+	return nil
 }

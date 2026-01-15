@@ -1,11 +1,12 @@
 package repositories
 
 import (
-	"backend/internal/core/domains"
-	ports "backend/internal/core/ports/repositories"
 	"fmt"
 
 	"gorm.io/gorm"
+
+	"backend/internal/core/domains"
+	ports "backend/internal/core/ports/repositories"
 )
 
 type QuestionnaireRepositoryDB struct {

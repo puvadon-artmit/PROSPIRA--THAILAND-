@@ -10,4 +10,5 @@ type CompanyNewsRepository interface {
 	UpdateCompanyNewsWithMap(companyNewsID string, updates map[string]interface{}) error
 	GetCompanyNewsCount() (int64, error)
 	GetCompanyNewsByTitle(title string) (domains.CompanyNews, error)
+	DeleteCompanyNews(companyNewsID string) error
 }

@@ -1,12 +1,12 @@
 package api
 
 import (
+	"github.com/gofiber/fiber/v2"
+	"gorm.io/gorm"
+
 	"backend/internal/core/services"
 	"backend/internal/handlers"
 	"backend/internal/repositories"
-
-	"github.com/gofiber/fiber/v2"
-	"gorm.io/gorm"
 )
 
 func RoutesJobRecruitment(db *gorm.DB) *fiber.App {
@@ -24,5 +24,6 @@ func RoutesJobRecruitment(db *gorm.DB) *fiber.App {
 	app.Get("/get-job-recruitments", JobRecruitmentHandler.GetJobRecruitmentsHandler)
 	app.Get("/get-job-recruitment/:job_recruitment_id", JobRecruitmentHandler.GetJobRecruitmentByIDHandler)
 	app.Put("/update-job-recruitment/:job_recruitment_id", JobRecruitmentHandler.UpdateJobRecruitmentWithMapHandler)
+	app.Delete("/delete-job-recruitment/:job_recruitment_id", JobRecruitmentHandler.DeleteJobRecruitmentHandler)
 	return app
 }

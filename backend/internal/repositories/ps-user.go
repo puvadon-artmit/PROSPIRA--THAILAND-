@@ -1,11 +1,12 @@
 package repositories
 
 import (
-	"backend/internal/core/domains"
-	ports "backend/internal/core/ports/repositories"
 	"fmt"
 
 	"gorm.io/gorm"
+
+	"backend/internal/core/domains"
+	ports "backend/internal/core/ports/repositories"
 )
 
 type UserRepositoryDB struct {
@@ -13,9 +14,9 @@ type UserRepositoryDB struct {
 }
 
 func NewUserRepositoryDB(db *gorm.DB) ports.UserRepository {
-	// if err := db.AutoMigrate(&domains.User{}); err != nil {
-	// 	fmt.Printf("failed to auto migrate: %v", err)
-	// }
+	if err := db.AutoMigrate(&domains.User{}); err != nil {
+		fmt.Printf("failed to auto migrate: %v", err)
+	}
 	return &UserRepositoryDB{db: db}
 }
 

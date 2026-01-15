@@ -1,12 +1,12 @@
 package api
 
 import (
+	"github.com/gofiber/fiber/v2"
+	"gorm.io/gorm"
+
 	"backend/internal/core/services"
 	"backend/internal/handlers"
 	"backend/internal/repositories"
-
-	"github.com/gofiber/fiber/v2"
-	"gorm.io/gorm"
 )
 
 func RoutesCompanyNews(db *gorm.DB) *fiber.App {
@@ -23,5 +23,7 @@ func RoutesCompanyNews(db *gorm.DB) *fiber.App {
 	app.Post("/create-company-news", CompanyNewsHandler.CreateCompanyNewsFormHandler)
 	app.Get("/get-company-news", CompanyNewsHandler.GetCompanyNewsHandler)
 	app.Get("/get-company-news-by-title", CompanyNewsHandler.GetCompanyNewsByTitleHandler)
+	app.Put("/update-company-news/:company_news_id", CompanyNewsHandler.UpdateCompanyNewsFormHandler)
+	app.Delete("/delete-company-news/:company_news_id", CompanyNewsHandler.DeleteCompanyNewsHandler)
 	return app
 }

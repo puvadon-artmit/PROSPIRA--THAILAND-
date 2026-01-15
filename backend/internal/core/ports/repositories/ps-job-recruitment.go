@@ -9,4 +9,5 @@ type JobRecruitmentRepository interface {
 	UpdateJobRecruitmentWithMap(jobRecruitmentID string, updates map[string]interface{}) error
 	GetJobRecruitmentCount() (int64, error)
 	GetJobRecruitments(limit, offset int) ([]domains.JobRecruitment, error)
+	DeleteJobRecruitment(jobRecruitmentID string) error
 }

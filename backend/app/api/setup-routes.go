@@ -1,11 +1,11 @@
 package api
 
 import (
-	routes "backend/app/api/routes"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"gorm.io/gorm"
+
+	routes "backend/app/api/routes"
 )
 
 func SetupRoutes(app *fiber.App, db *gorm.DB) {
@@ -22,4 +22,5 @@ func SetupRoutes(app *fiber.App, db *gorm.DB) {
 	api.Mount("/questionnaire", routes.RoutesQuestionnaire(db))
 	api.Mount("/uploads", routes.RoutesUpload())
 	api.Mount("/company-news", routes.RoutesCompanyNews(db))
+	api.Mount("/product", routes.RoutesProduct(db))
 }
