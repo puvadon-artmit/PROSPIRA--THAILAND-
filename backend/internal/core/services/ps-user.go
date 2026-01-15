@@ -68,7 +68,7 @@ func (s *userService) UpdateUserWithMapService(userID string, updates map[string
 	return s.userisrRepo.UpdateUserWithMap(userID, updates)
 }
 
-func (s *userService) SignIn(dto models.LoginCookieResp) (string, error) {
+func (s *userService) SignIn(dto models.LoginEmpResp) (string, error) {
 	user, err := s.userisrRepo.FindByUsername(dto.Username)
 	if err != nil {
 		return "", errors.New("ชื่อผู้ใช้ไม่ถูกต้อง")
@@ -80,10 +80,6 @@ func (s *userService) SignIn(dto models.LoginCookieResp) (string, error) {
 
 	if user.Status == "disable" {
 		return "", errors.New("บัญชีนี้ถูกปิดการใช้งาน")
-	}
-
-	if !utils.Compare(dto.Password, user.Password) {
-		return "", errors.New("รหัสผ่านไม่ถูกต้อง")
 	}
 
 	jwtSecretKey := []byte(os.Getenv("TOKEN_SECRET_KEY"))
@@ -105,6 +101,44 @@ func (s *userService) SignIn(dto models.LoginCookieResp) (string, error) {
 
 	return signedToken, nil
 }
+
+// func (s *userService) SignIn(dto models.LoginEmpResp) (string, error) {
+// 	user, err := s.userisrRepo.FindByUsername(dto.Username)
+// 	if err != nil {
+// 		return "", errors.New("ชื่อผู้ใช้ไม่ถูกต้อง")
+// 	}
+
+// 	if user == nil {
+// 		return "", errors.New("ไม่พบผู้ใช้")
+// 	}
+
+// 	if user.Status == "disable" {
+// 		return "", errors.New("บัญชีนี้ถูกปิดการใช้งาน")
+// 	}
+
+// 	if !utils.Compare(dto.Password, user.Password) {
+// 		return "", errors.New("รหัสผ่านไม่ถูกต้อง")
+// 	}
+
+// 	jwtSecretKey := []byte(os.Getenv("TOKEN_SECRET_KEY"))
+// 	claims := jwt.MapClaims{
+// 		"user_id":   user.UserID,
+// 		"username":  user.Username,
+// 		"firstname": user.Firstname,
+// 		"lastname":  user.Lastname,
+// 		"status":    user.Status,
+// 		"iat":       time.Now().Unix(),
+// 		"exp":       time.Now().Add(time.Hour * 24).Unix(),
+// 	}
+
+// 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+// 	signedToken, err := jwtToken.SignedString(jwtSecretKey)
+// 	if err != nil {
+// 		return "", errors.New("เกิดข้อผิดพลาดในการเซ็นชื่อ JWT")
+// 	}
+
+// 	return signedToken, nil
+// }
 
 func (s *userService) GetProfileByCookieId(userID string) (models.UserReq, error) {
 	// ดึงข้อมูล User จาก repository

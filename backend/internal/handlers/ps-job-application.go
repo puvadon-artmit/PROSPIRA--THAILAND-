@@ -57,7 +57,7 @@ func (h *JobApplicationHandler) CreateJobApplicationHandler(c *fiber.Ctx) error 
 func (h *JobApplicationHandler) GetJobApplicationsHandler(c *fiber.Ctx) error {
 	limit, offset := c.QueryInt("limit", 10), c.QueryInt("offset", 0)
 
-	jobs, err := h.JobApplicationSrv.GetJobApplications(limit, offset)
+	jobs, err := h.JobApplicationSrv.GetJobApplicationService(limit, offset)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to retrieve job applications",

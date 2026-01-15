@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"gorm.io/datatypes"
 )
 
 type JobRecruitmentService struct {
@@ -31,6 +30,7 @@ func (s *JobRecruitmentService) CreateJobRecruitmentService(req models.JobRecrui
 	}
 
 	domainISR := domains.JobRecruitment{
+
 		JobRecruitmentID: newID.String(),
 		Title:            req.Title,
 		Department:       req.Department,
@@ -39,7 +39,7 @@ func (s *JobRecruitmentService) CreateJobRecruitmentService(req models.JobRecrui
 		Salary:           req.Salary,
 		Hot:              req.Hot,
 		Description:      req.Description,
-		Requirements:     datatypes.JSON(requirementsBytes),
+		Requirements:     string(requirementsBytes),
 		UsernameCreator:  req.UsernameCreator,
 		CreatedAt:        time.Now(),
 		UpdatedAt:        time.Now(),
@@ -68,8 +68,9 @@ func (s *JobRecruitmentService) GetJobRecruitments(limit, offset int) ([]models.
 	}
 
 	for _, job := range query {
+
 		var requirements []string
-		if err := json.Unmarshal(job.Requirements, &requirements); err != nil {
+		if err := json.Unmarshal([]byte(job.Requirements), &requirements); err != nil {
 			return nil, fmt.Errorf("failed to unmarshal requirements: %w", err)
 		}
 
@@ -106,10 +107,8 @@ func (s *JobRecruitmentService) GetJobRecruitmentByIDService(jobRecruitmentID st
 	}
 
 	var requirements []string
-	if len(query.Requirements) > 0 {
-		if err := json.Unmarshal(query.Requirements, &requirements); err != nil {
-			return out, fmt.Errorf("failed to unmarshal requirements: %w", err)
-		}
+	if err := json.Unmarshal([]byte(query.Requirements), &requirements); err != nil {
+		return out, fmt.Errorf("failed to unmarshal requirements: %w", err)
 	}
 
 	out = models.JobRecruitmentReq{
@@ -123,6 +122,8 @@ func (s *JobRecruitmentService) GetJobRecruitmentByIDService(jobRecruitmentID st
 		Description:      query.Description,
 		Requirements:     requirements,
 		UsernameCreator:  query.UsernameCreator,
+		CreatedAt:        query.CreatedAt.Format("2006-01-02 15:04:05"),
+		UpdatedAt:        query.UpdatedAt.Format("2006-01-02 15:04:05"),
 	}
 
 	return out, nil

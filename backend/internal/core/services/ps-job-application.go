@@ -51,7 +51,7 @@ func (s *JobApplicationService) CreateJobApplicationService(req models.JobApplic
 	return nil
 }
 
-func (s *JobApplicationService) GetJobApplications(limit, offset int) ([]models.JobApplicationReq, error) {
+func (s *JobApplicationService) GetJobApplicationService(limit, offset int) ([]models.JobApplicationReq, error) {
 	var jobs []models.JobApplicationReq
 
 	query, err := s.jobApplicationRepo.GetJobApplications(limit, offset)

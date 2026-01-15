@@ -9,4 +9,9 @@ type UserRepository interface {
 	GetAllUser() ([]domains.User, error)
 	UpdateUserWithMap(userID string, updates map[string]interface{}) error
 	GetUserCount() (int64, error)
+	GetEmployeeByFullNameEn(fullNameEn string) (*domains.EmployeeView, error)
+
+	// ====================== Employee View ===================================
+	FindEmployeeByAccount(account string) (*domains.EmployeeView, error)
+	GetEmployeeByEmpCode(empCode string) (*domains.EmployeeView, error)
 }

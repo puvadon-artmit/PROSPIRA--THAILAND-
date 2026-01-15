@@ -16,14 +16,14 @@ type JobRecruitmentRepositoryDB struct {
 }
 
 func NewJobRecruitmentRepositoryDB(db *gorm.DB) ports.JobRecruitmentRepository {
-	// if err := db.AutoMigrate(&domains.JobRecruitment{}); err != nil {
-	// 	fmt.Printf("failed to auto migrate: %v", err)
-	// }
+	if err := db.AutoMigrate(&domains.JobRecruitment{}); err != nil {
+		fmt.Printf("failed to auto migrate: %v", err)
+	}
 	return &JobRecruitmentRepositoryDB{db: db}
 }
 
 func (r *JobRecruitmentRepositoryDB) CreateJobRecruitmentRepository(User *domains.JobRecruitment) error {
-	if err := r.db.Create(User).Error; err != nil {
+	if err := r.db.Debug().Create(User).Error; err != nil {
 		fmt.Printf("CreateUserRepository error: %v\n", err)
 		return err
 	}

@@ -50,7 +50,7 @@ type LoginResp struct {
 	Password string `json:"password"`
 }
 
-type LoginCookieResp struct {
+type LoginEmpResp struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }

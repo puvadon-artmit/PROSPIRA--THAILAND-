@@ -15,9 +15,9 @@ type CompanyNewsRepositoryDB struct {
 }
 
 func NewCompanyNewsRepositoryDB(db *gorm.DB) ports.CompanyNewsRepository {
-	// if err := db.AutoMigrate(&domains.CompanyNews{}); err != nil {
-	// 	fmt.Printf("failed to auto migrate: %v", err)
-	// }
+	if err := db.AutoMigrate(&domains.CompanyNews{}); err != nil {
+		fmt.Printf("failed to auto migrate: %v", err)
+	}
 	return &CompanyNewsRepositoryDB{db: db}
 }
 
@@ -31,12 +31,12 @@ func (r *CompanyNewsRepositoryDB) CreateCompanyNews(n *domains.CompanyNews) erro
 	}
 
 	const q = `
-		INSERT INTO company_news
-			(company_news_photo, title, content, category, username_creator, created_at, updated_at)
-		VALUES
-			($1, $2, $3, $4, $5, $6, $7)
-		RETURNING company_news_id, created_at, updated_at;
-	`
+	INSERT INTO company_news
+		(company_news_id, company_news_photo, title, content, category, username_creator, created_at, updated_at)
+	OUTPUT INSERTED.company_news_id, INSERTED.created_at, INSERTED.updated_at
+	VALUES
+		(NEWID(), ?, ?, ?, ?, ?, ?, ?);
+`
 
 	type ret struct {
 		CompanyNewsID string
@@ -56,6 +56,7 @@ func (r *CompanyNewsRepositoryDB) CreateCompanyNews(n *domains.CompanyNews) erro
 			n.UpdatedAt,
 		).
 		Scan(&out).Error; err != nil {
+
 		fmt.Printf("CreateCompanyNews error: %v\n", err)
 		return err
 	}
@@ -99,19 +100,32 @@ func (r *CompanyNewsRepositoryDB) GetAllCompanyNews() ([]domains.CompanyNews, er
 
 func (r *CompanyNewsRepositoryDB) GetCompanyNews(limit, offset int) ([]domains.CompanyNews, int64, error) {
 	var total int64
+
 	const countQ = `SELECT COUNT(*) FROM company_news;`
 	if err := r.db.Raw(countQ).Scan(&total).Error; err != nil {
+		fmt.Printf("GetCompanyNews count error: %v\n", err)
 		return nil, 0, err
 	}
+
+	if limit <= 0 {
+		limit = 10
+	}
+	if offset < 0 {
+		offset = 0
+	}
+
 	const q = `
         SELECT company_news_id, company_news_photo, title, content, category,
                username_creator, created_at, updated_at
         FROM company_news
         ORDER BY created_at DESC
-        LIMIT $1 OFFSET $2;
+        OFFSET ? ROWS
+        FETCH NEXT ? ROWS ONLY;
     `
+
 	var list []domains.CompanyNews
-	if err := r.db.Raw(q, limit, offset).Scan(&list).Error; err != nil {
+	if err := r.db.Raw(q, offset, limit).Scan(&list).Error; err != nil {
+		fmt.Printf("GetCompanyNews list error: %v\n", err)
 		return nil, 0, err
 	}
 
@@ -171,15 +185,22 @@ func (r *CompanyNewsRepositoryDB) GetCompanyNewsCount() (int64, error) {
 
 func (r *CompanyNewsRepositoryDB) GetCompanyNewsByTitle(title string) (domains.CompanyNews, error) {
 	const q = `
-		SELECT company_news_id, company_news_photo, title, content, category,
-		       username_creator, created_at, updated_at
+		SELECT TOP 1
+			company_news_id,
+			company_news_photo,
+			title,
+			content,
+			category,
+			username_creator,
+			created_at,
+			updated_at
 		FROM company_news
-		WHERE title = $1
-		LIMIT 1;
+		WHERE title = ?
+		ORDER BY created_at DESC;
 	`
 
 	var row domains.CompanyNews
-	if err := r.db.Raw(q, title).Scan(&row).Error; err != nil {
+	if err := r.db.Debug().Raw(q, title).Scan(&row).Error; err != nil {
 		return domains.CompanyNews{}, err
 	}
 	return row, nil
