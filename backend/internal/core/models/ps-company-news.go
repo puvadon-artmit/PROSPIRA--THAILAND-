@@ -11,6 +11,8 @@ type CompanyNewsReq struct {
 	UsernameCreator  string    `json:"username_creator"`
 	CreatedAt        string    `json:"created_at"`
 	UpdatedAt        string    `json:"updated_at"`
+	TitleEN          string    `json:"title_en"`
+	ContentEN        string    `json:"content_en"`
 }
 
 type CompanyNewsListResp struct {
@@ -30,4 +32,6 @@ type CompanyNewsResp struct {
 	UsernameCreator  string `json:"username_creator"`
 	CreatedAt        string `json:"created_at"`
 	UpdatedAt        string `json:"updated_at"`
+	TitleEN          string `json:"title_en"`
+	ContentEN        string `json:"content_en"`
 }

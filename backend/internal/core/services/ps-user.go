@@ -1,12 +1,6 @@
 package services
 
 import (
-	"backend/internal/core/domains"
-	"backend/internal/core/models"
-	ports "backend/internal/core/ports/repositories"
-	servicesports "backend/internal/core/ports/services"
-	"backend/internal/pkgs/logs"
-	"backend/internal/pkgs/utils"
 	"errors"
 	"fmt"
 	"log"
@@ -15,6 +9,13 @@ import (
 
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
+
+	"backend/internal/core/domains"
+	"backend/internal/core/models"
+	ports "backend/internal/core/ports/repositories"
+	servicesports "backend/internal/core/ports/services"
+	"backend/internal/pkgs/logs"
+	"backend/internal/pkgs/utils"
 )
 
 type userService struct {

@@ -9,8 +9,10 @@ import (
 type Product struct {
 	ProductID         string `gorm:"type:char(36);primaryKey;default:(newid())"` // รหัสผลิตภัณฑ์
 	ProductName       string
+	ProductNameEN     string
 	Category          string
 	Description       string
+	DescriptionEN     string
 	Recommend         bool
 	ProductMainImages string
 	ProductImages     string `gorm:"type:text"` // รูปภาพหลายรูป (JSON array เช่น ["uploads/company_news/20251103_103916_a2ba9c7d430a2768.JPG","uploads/company_news/20251103_103916_a2ba9c7d430a2769.JPG"])

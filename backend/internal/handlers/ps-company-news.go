@@ -20,6 +20,12 @@ func NewCompanyNewsHandler(insSrv services.CompanyNewsService) *CompanyNewsHandl
 
 func (h *CompanyNewsHandler) GetCompanyNewsHandler(c *fiber.Ctx) error {
 	limit, offset := c.QueryInt("limit", 10), c.QueryInt("offset", 0)
+	lang := c.Query("lang", "th")
+
+	// Validate language parameter
+	if lang != "en" && lang != "th" {
+		lang = "th"
+	}
 
 	jobs, err := h.CompanyNewsSrv.GetCompanyNews(limit, offset)
 	if err != nil {
@@ -28,7 +34,16 @@ func (h *CompanyNewsHandler) GetCompanyNewsHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.JSON(jobs)
+	// Process company news based on language
+	processedNews := processNewsByLanguage(jobs.Data, lang)
+
+	return c.JSON(fiber.Map{
+		"total":       jobs.Total,
+		"total_pages": jobs.TotalPages,
+		"limit":       jobs.Limit,
+		"offset":      jobs.Offset,
+		"data":        processedNews,
+	})
 }
 
 func (h *CompanyNewsHandler) CreateCompanyNewsFormHandler(c *fiber.Ctx) error {
@@ -65,6 +80,12 @@ func (h *CompanyNewsHandler) CreateCompanyNewsFormHandler(c *fiber.Ctx) error {
 
 func (h *CompanyNewsHandler) GetCompanyNewsByTitleHandler(c *fiber.Ctx) error {
 	title := c.Query("title")
+	lang := c.Query("lang", "th")
+
+	// Validate language parameter
+	if lang != "en" && lang != "th" {
+		lang = "th"
+	}
 
 	job, err := h.CompanyNewsSrv.GetCompanyNewsByTitle(title)
 	if err != nil {
@@ -73,7 +94,41 @@ func (h *CompanyNewsHandler) GetCompanyNewsByTitleHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.JSON(job)
+	// Process news based on language
+	processedNews := processNewsItemByLanguage(&job, lang)
+
+	return c.JSON(processedNews)
+}
+
+func (h *CompanyNewsHandler) GetCompanyNewsByIDHandler(c *fiber.Ctx) error {
+	id := c.Query("id")
+	lang := c.Query("lang", "th")
+	log.Printf("[GetCompanyNewsByIDHandler] Received ID: %s, Lang: %s\n", id, lang)
+
+	// Validate language parameter
+	if lang != "en" && lang != "th" {
+		lang = "th"
+	}
+
+	if id == "" {
+		log.Println("[GetCompanyNewsByIDHandler] Error: ID is empty")
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Company news ID is required",
+		})
+	}
+
+	job, err := h.CompanyNewsSrv.GetCompanyNewsByID(id)
+	if err != nil {
+		log.Printf("[GetCompanyNewsByIDHandler] Error retrieving company news: %v\n", err)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to retrieve company news",
+		})
+	}
+
+	// Process news based on language
+	processedNews := processNewsItemByLanguage(&job, lang)
+
+	return c.JSON(processedNews)
 }
 
 func (h *CompanyNewsHandler) UpdateCompanyNewsFormHandler(c *fiber.Ctx) error {
@@ -180,4 +235,54 @@ func (h *CompanyNewsHandler) DeleteCompanyNewsHandler(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "Company news deleted successfully",
 	})
+}
+
+// processNewsByLanguage processes company news list to use English or Thai titles/content
+func processNewsByLanguage(news []models.CompanyNewsReq, lang string) []fiber.Map {
+	processedNews := make([]fiber.Map, len(news))
+
+	for i, item := range news {
+		newsMap := fiber.Map{
+			"company_news_id":    item.CompanyNewsID,
+			"title":              item.Title,
+			"content":            item.Content,
+			"category":           item.Category,
+			"company_news_photo": item.CompanyNewsPhoto,
+			"username_creator":   item.UsernameCreator,
+			"created_at":         item.CreatedAt,
+			"updated_at":         item.UpdatedAt,
+		}
+
+		// Replace with English content if lang is "en"
+		if lang == "en" {
+			newsMap["title"] = item.TitleEN
+			newsMap["content"] = item.ContentEN
+		}
+
+		processedNews[i] = newsMap
+	}
+
+	return processedNews
+}
+
+// processNewsItemByLanguage processes single news item to use English or Thai title/content
+func processNewsItemByLanguage(news *models.CompanyNewsReq, lang string) fiber.Map {
+	newsMap := fiber.Map{
+		"company_news_id":    news.CompanyNewsID,
+		"title":              news.Title,
+		"content":            news.Content,
+		"category":           news.Category,
+		"company_news_photo": news.CompanyNewsPhoto,
+		"username_creator":   news.UsernameCreator,
+		"created_at":         news.CreatedAt,
+		"updated_at":         news.UpdatedAt,
+	}
+
+	// Replace with English content if lang is "en"
+	if lang == "en" {
+		newsMap["title"] = news.TitleEN
+		newsMap["content"] = news.ContentEN
+	}
+
+	return newsMap
 }

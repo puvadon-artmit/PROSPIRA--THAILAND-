@@ -14,9 +14,9 @@ type ProductRepositoryDB struct {
 }
 
 func NewProductRepositoryDB(db *gorm.DB) ports.ProductRepository {
-	if err := db.AutoMigrate(&domains.Product{}); err != nil {
-		fmt.Printf("failed to auto migrate: %v", err)
-	}
+	// if err := db.AutoMigrate(&domains.Product{}); err != nil {
+	// 	fmt.Printf("failed to auto migrate: %v", err)
+	// }
 	return &ProductRepositoryDB{db: db}
 }
 

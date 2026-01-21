@@ -1,10 +1,11 @@
 package repositories
 
 import (
-	"backend/internal/core/domains"
 	"fmt"
 
 	"gorm.io/gorm"
+
+	"backend/internal/core/domains"
 )
 
 func (r *UserRepositoryDB) GetEmployeeByFullNameEn(fullNameEn string) (*domains.EmployeeView, error) {
@@ -38,4 +39,18 @@ func (r *UserRepositoryDB) FindEmployeeByAccount(account string) (*domains.Emplo
 		return nil, err
 	}
 	return &user, nil
+}
+
+func (r *UserRepositoryDB) GetEmployees() ([]domains.EmployeeView, error) {
+	var employees []domains.EmployeeView
+	const limit int = 5000
+
+	if err := r.db.
+		Where("UHR_StatusToUse <> ?", "DISABLE").
+		Limit(limit).
+		Find(&employees).Error; err != nil {
+		return nil, err
+	}
+
+	return employees, nil
 }

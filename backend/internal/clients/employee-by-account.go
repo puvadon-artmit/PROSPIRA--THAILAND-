@@ -1,7 +1,6 @@
 package clients
 
 import (
-	"backend/internal/core/models"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -9,6 +8,8 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"backend/internal/core/models"
 )
 
 func FindEmployeeFromMicroservice(account string) (*models.EmployeeViewResp, error) {
@@ -38,6 +39,7 @@ func FindEmployeeFromMicroservice(account string) (*models.EmployeeViewResp, err
 	if err != nil {
 		return nil, err
 	}
+
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {

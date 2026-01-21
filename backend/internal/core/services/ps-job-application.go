@@ -1,16 +1,17 @@
 package services
 
 import (
-	"backend/internal/core/domains"
-	"backend/internal/core/models"
-	ports "backend/internal/core/ports/repositories"
-	servicesports "backend/internal/core/ports/services"
-	"backend/internal/pkgs/logs"
 	"fmt"
 	"log"
 	"time"
 
 	"github.com/google/uuid"
+
+	"backend/internal/core/domains"
+	"backend/internal/core/models"
+	ports "backend/internal/core/ports/repositories"
+	servicesports "backend/internal/core/ports/services"
+	"backend/internal/pkgs/logs"
 )
 
 type JobApplicationService struct {

@@ -1,10 +1,6 @@
 package handlers
 
 import (
-	"backend/internal/clients"
-	"backend/internal/core/domains"
-	"backend/internal/core/models"
-	services "backend/internal/core/ports/services"
 	"errors"
 	"log"
 	"net/http"
@@ -13,6 +9,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/spf13/viper"
+
+	"backend/internal/core/domains"
+	"backend/internal/core/models"
+	services "backend/internal/core/ports/services"
 )
 
 type UserHandler struct {
@@ -61,22 +61,6 @@ func (h *UserHandler) LoginHandler(c *fiber.Ctx) error {
 			"error": "ข้อมูลไม่ถูกต้อง",
 		})
 	}
-
-	// 1) LDAP auth
-	ok, msg := clients.LdapAuthenticate(loginData.Username, loginData.Password)
-	if !ok {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"success": false,
-			"message": msg,
-		})
-	}
-
-	// token, err := h.UserSrv.SignIn(loginData)
-	// if err != nil {
-	// 	return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-	// 		"error": err.Error(),
-	// 	})
-	// }
 
 	token, err := h.UserSrv.SignInEmployee(loginData)
 	if err != nil {
@@ -255,6 +239,17 @@ func (h *UserHandler) GetAllUserHandler(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).JSON(Companies)
 }
+
+// func (h *UserHandler) GetAllEmployeesHandler(c *fiber.Ctx) error {
+// 	employees, err := h.UserSrv.GetAllEmployeesService()
+// 	if err != nil {
+// 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+// 			"message": "Failed to retrieve employees",
+// 		})
+// 	}
+
+// 	return c.Status(fiber.StatusOK).JSON(employees)
+// }
 
 func (h *UserHandler) CheckAuth(c *fiber.Ctx) error {
 	cookie := c.Cookies("Car_")

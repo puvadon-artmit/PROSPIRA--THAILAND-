@@ -71,20 +71,38 @@ func (s *JobRecruitmentService) GetJobRecruitments(limit, offset int) ([]models.
 	for _, job := range query {
 
 		var requirements []string
-		if err := json.Unmarshal([]byte(job.Requirements), &requirements); err != nil {
-			return nil, fmt.Errorf("failed to unmarshal requirements: %w", err)
+		if job.Requirements != "" {
+			if err := json.Unmarshal([]byte(job.Requirements), &requirements); err != nil {
+				log.Printf("[GetJobRecruitments] Warning: failed to unmarshal requirements for job %s: %v, using empty array\n", job.JobRecruitmentID, err)
+				requirements = []string{}
+			}
+		} else {
+			requirements = []string{}
+		}
+
+		var requirementsEN []string
+		if job.RequirementsEN != "" {
+			if err := json.Unmarshal([]byte(job.RequirementsEN), &requirementsEN); err != nil {
+				log.Printf("[GetJobRecruitments] Warning: failed to unmarshal requirements_en for job %s: %v, using empty array\n", job.JobRecruitmentID, err)
+				requirementsEN = []string{}
+			}
+		} else {
+			requirementsEN = []string{}
 		}
 
 		jobReq := models.JobRecruitmentReq{
 			JobRecruitmentID: job.JobRecruitmentID,
 			Title:            job.Title,
+			TitleEN:          job.TitleEN,
 			Department:       job.Department,
 			Location:         job.Location,
 			Type:             job.Type,
 			Salary:           job.Salary,
 			Hot:              job.Hot,
 			Description:      job.Description,
+			DescriptionEN:    job.DescriptionEN,
 			Requirements:     requirements,
+			RequirementsEN:   requirementsEN,
 			UsernameCreator:  job.UsernameCreator,
 			CreatedAt:        job.CreatedAt.Format("2006-01-02 15:04:05"),
 			UpdatedAt:        job.UpdatedAt.Format("2006-01-02 15:04:05"),
@@ -110,20 +128,38 @@ func (s *JobRecruitmentService) GetJobRecruitmentByIDService(jobRecruitmentID st
 	}
 
 	var requirements []string
-	if err := json.Unmarshal([]byte(query.Requirements), &requirements); err != nil {
-		return out, fmt.Errorf("failed to unmarshal requirements: %w", err)
+	if query.Requirements != "" {
+		if err := json.Unmarshal([]byte(query.Requirements), &requirements); err != nil {
+			log.Printf("[GetJobRecruitmentByIDService] Warning: failed to unmarshal requirements for job %s: %v, using empty array\n", query.JobRecruitmentID, err)
+			requirements = []string{}
+		}
+	} else {
+		requirements = []string{}
+	}
+
+	var requirementsEN []string
+	if query.RequirementsEN != "" {
+		if err := json.Unmarshal([]byte(query.RequirementsEN), &requirementsEN); err != nil {
+			log.Printf("[GetJobRecruitmentByIDService] Warning: failed to unmarshal requirements_en for job %s: %v, using empty array\n", query.JobRecruitmentID, err)
+			requirementsEN = []string{}
+		}
+	} else {
+		requirementsEN = []string{}
 	}
 
 	out = models.JobRecruitmentReq{
 		JobRecruitmentID: query.JobRecruitmentID,
 		Title:            query.Title,
+		TitleEN:          query.TitleEN,
 		Department:       query.Department,
 		Location:         query.Location,
 		Type:             query.Type,
 		Salary:           query.Salary,
 		Hot:              query.Hot,
 		Description:      query.Description,
+		DescriptionEN:    query.DescriptionEN,
 		Requirements:     requirements,
+		RequirementsEN:   requirementsEN,
 		UsernameCreator:  query.UsernameCreator,
 		CreatedAt:        query.CreatedAt.Format("2006-01-02 15:04:05"),
 		UpdatedAt:        query.UpdatedAt.Format("2006-01-02 15:04:05"),

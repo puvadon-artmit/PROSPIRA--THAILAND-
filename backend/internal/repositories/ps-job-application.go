@@ -1,11 +1,12 @@
 package repositories
 
 import (
-	"backend/internal/core/domains"
-	ports "backend/internal/core/ports/repositories"
 	"fmt"
 
 	"gorm.io/gorm"
+
+	"backend/internal/core/domains"
+	ports "backend/internal/core/ports/repositories"
 )
 
 type JobApplicationRepositoryDB struct {
@@ -13,9 +14,9 @@ type JobApplicationRepositoryDB struct {
 }
 
 func NewJobApplicationRepositoryDB(db *gorm.DB) ports.JobApplicationRepository {
-	if err := db.AutoMigrate(&domains.JobApplication{}); err != nil {
-		fmt.Printf("failed to auto migrate: %v", err)
-	}
+	// if err := db.AutoMigrate(&domains.JobApplication{}); err != nil {
+	// 	fmt.Printf("failed to auto migrate: %v", err)
+	// }
 	return &JobApplicationRepositoryDB{db: db}
 }
 

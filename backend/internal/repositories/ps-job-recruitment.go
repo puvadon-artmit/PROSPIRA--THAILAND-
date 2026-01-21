@@ -36,7 +36,8 @@ func (r *JobRecruitmentRepositoryDB) GetJobRecruitmentByID(jobRecruitmentID stri
 	const q = `
 		SELECT CONVERT(NVARCHAR(36), job_recruitment_id) AS job_recruitment_id,
 		       title, department, location, type, salary, hot, description,
-		       requirements, username_creator, created_at, updated_at
+		       requirements, username_creator, created_at, updated_at,
+		       title_en, description_en, requirements_en
 		FROM job_recruitments
 		WHERE job_recruitment_id = ? AND deleted_at IS NULL;
 	`
@@ -49,13 +50,16 @@ func (r *JobRecruitmentRepositoryDB) GetJobRecruitmentByID(jobRecruitmentID stri
 	return domains.JobRecruitment{
 		JobRecruitmentID: row.JobRecruitmentID,
 		Title:            row.Title,
+		TitleEN:          row.TitleEN,
 		Department:       row.Department,
 		Location:         row.Location,
 		Type:             row.Type,
 		Salary:           row.Salary,
 		Hot:              row.Hot,
 		Description:      row.Description,
+		DescriptionEN:    row.DescriptionEN,
 		Requirements:     row.Requirements,
+		RequirementsEN:   row.RequirementsEN,
 		UsernameCreator:  row.UsernameCreator,
 		CreatedAt:        row.CreatedAt,
 		UpdatedAt:        row.UpdatedAt,
@@ -66,7 +70,8 @@ func (r *JobRecruitmentRepositoryDB) GetAllJobRecruitment() ([]domains.JobRecrui
 	const q = `
 		SELECT CONVERT(NVARCHAR(36), job_recruitment_id) AS job_recruitment_id,
 		       title, department, location, type, salary, hot, description,
-		       requirements, username_creator, created_at, updated_at
+		       requirements, username_creator, created_at, updated_at,
+		       title_en, description_en, requirements_en
 		FROM job_recruitments
 		WHERE deleted_at IS NULL
 		ORDER BY created_at DESC;
@@ -75,13 +80,16 @@ func (r *JobRecruitmentRepositoryDB) GetAllJobRecruitment() ([]domains.JobRecrui
 	type jobRow struct {
 		JobRecruitmentID string    `gorm:"column:job_recruitment_id"`
 		Title            string    `gorm:"column:title"`
+		TitleEN          string    `gorm:"column:title_en"`
 		Department       string    `gorm:"column:department"`
 		Location         string    `gorm:"column:location"`
 		Type             string    `gorm:"column:type"`
 		Salary           string    `gorm:"column:salary"`
 		Hot              bool      `gorm:"column:hot"`
 		Description      string    `gorm:"column:description"`
+		DescriptionEN    string    `gorm:"column:description_en"`
 		Requirements     string    `gorm:"column:requirements"`
+		RequirementsEN   string    `gorm:"column:requirements_en"`
 		UsernameCreator  string    `gorm:"column:username_creator"`
 		CreatedAt        time.Time `gorm:"column:created_at"`
 		UpdatedAt        time.Time `gorm:"column:updated_at"`
@@ -97,13 +105,16 @@ func (r *JobRecruitmentRepositoryDB) GetAllJobRecruitment() ([]domains.JobRecrui
 		jobs = append(jobs, domains.JobRecruitment{
 			JobRecruitmentID: row.JobRecruitmentID,
 			Title:            row.Title,
+			TitleEN:          row.TitleEN,
 			Department:       row.Department,
 			Location:         row.Location,
 			Type:             row.Type,
 			Salary:           row.Salary,
 			Hot:              row.Hot,
 			Description:      row.Description,
+			DescriptionEN:    row.DescriptionEN,
 			Requirements:     row.Requirements,
+			RequirementsEN:   row.RequirementsEN,
 			UsernameCreator:  row.UsernameCreator,
 			CreatedAt:        row.CreatedAt,
 			UpdatedAt:        row.UpdatedAt,
@@ -117,7 +128,8 @@ func (r *JobRecruitmentRepositoryDB) GetJobRecruitments(limit, offset int) ([]do
 	const q = `
 		SELECT CONVERT(NVARCHAR(36), job_recruitment_id) AS job_recruitment_id,
 		       title, department, location, type, salary, hot, description,
-		       requirements, username_creator, created_at, updated_at
+		       requirements, username_creator, created_at, updated_at,
+			   title_en, description_en, requirements_en
 		FROM job_recruitments
 		WHERE deleted_at IS NULL
 		ORDER BY created_at DESC
@@ -128,20 +140,23 @@ func (r *JobRecruitmentRepositoryDB) GetJobRecruitments(limit, offset int) ([]do
 	type jobRow struct {
 		JobRecruitmentID string    `gorm:"column:job_recruitment_id"`
 		Title            string    `gorm:"column:title"`
+		TitleEN          string    `gorm:"column:title_en"`
 		Department       string    `gorm:"column:department"`
 		Location         string    `gorm:"column:location"`
 		Type             string    `gorm:"column:type"`
 		Salary           string    `gorm:"column:salary"`
 		Hot              bool      `gorm:"column:hot"`
 		Description      string    `gorm:"column:description"`
+		DescriptionEN    string    `gorm:"column:description_en"`
 		Requirements     string    `gorm:"column:requirements"`
+		RequirementsEN   string    `gorm:"column:requirements_en"`
 		UsernameCreator  string    `gorm:"column:username_creator"`
 		CreatedAt        time.Time `gorm:"column:created_at"`
 		UpdatedAt        time.Time `gorm:"column:updated_at"`
 	}
 
 	var rows []jobRow
-	if err := r.db.Raw(q, offset, limit).Scan(&rows).Error; err != nil {
+	if err := r.db.Debug().Raw(q, offset, limit).Scan(&rows).Error; err != nil {
 		return nil, err
 	}
 
@@ -150,13 +165,16 @@ func (r *JobRecruitmentRepositoryDB) GetJobRecruitments(limit, offset int) ([]do
 		jobs = append(jobs, domains.JobRecruitment{
 			JobRecruitmentID: row.JobRecruitmentID,
 			Title:            row.Title,
+			TitleEN:          row.TitleEN,
 			Department:       row.Department,
 			Location:         row.Location,
 			Type:             row.Type,
 			Salary:           row.Salary,
 			Hot:              row.Hot,
 			Description:      row.Description,
+			DescriptionEN:    row.DescriptionEN,
 			Requirements:     row.Requirements,
+			RequirementsEN:   row.RequirementsEN,
 			UsernameCreator:  row.UsernameCreator,
 			CreatedAt:        row.CreatedAt,
 			UpdatedAt:        row.UpdatedAt,

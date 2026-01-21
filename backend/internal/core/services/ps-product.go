@@ -29,8 +29,10 @@ func (s *productService) CreateProductService(req models.CreateProductRequest) e
 	domainProduct := domains.Product{
 		ProductID:         newID.String(),
 		ProductName:       req.ProductName,
+		ProductNameEN:     req.ProductNameEN,
 		Category:          req.Category,
 		Description:       req.Description,
+		DescriptionEN:     req.DescriptionEN,
 		ProductMainImages: req.ProductMainImages,
 		ProductImages:     req.ProductImages,
 		Recommend:         req.Recommend,
@@ -62,8 +64,10 @@ func (s *productService) GetAllProductsService(limit int) ([]models.ProductRespo
 		productResponse := models.ProductResponse{
 			ProductID:         dp.ProductID,
 			ProductName:       dp.ProductName,
+			ProductNameEN:     dp.ProductNameEN,
 			Category:          dp.Category,
 			Description:       dp.Description,
+			DescriptionEN:     dp.DescriptionEN,
 			ProductMainImages: dp.ProductMainImages,
 			ProductImages:     dp.ProductImages,
 			Recommend:         dp.Recommend,
@@ -88,8 +92,10 @@ func (s *productService) GetRecommendedProductService(limit int) ([]models.Produ
 		productResponse := models.ProductResponse{
 			ProductID:         dp.ProductID,
 			ProductName:       dp.ProductName,
+			ProductNameEN:     dp.ProductNameEN,
 			Category:          dp.Category,
 			Description:       dp.Description,
+			DescriptionEN:     dp.DescriptionEN,
 			ProductMainImages: dp.ProductMainImages,
 			// ProductImages:     dp.ProductImages,
 			Recommend: dp.Recommend,
@@ -119,11 +125,17 @@ func (s *productService) UpdateProductService(productID string, req models.Updat
 	if req.ProductName != "" {
 		existingProduct.ProductName = req.ProductName
 	}
+	if req.ProductNameEN != "" {
+		existingProduct.ProductNameEN = req.ProductNameEN
+	}
 	if req.Category != "" {
 		existingProduct.Category = req.Category
 	}
 	if req.Description != "" {
 		existingProduct.Description = req.Description
+	}
+	if req.DescriptionEN != "" {
+		existingProduct.DescriptionEN = req.DescriptionEN
 	}
 
 	// Update recommend only if provided
@@ -214,8 +226,10 @@ func (s *productService) SearchProductsByName(keyword string, limit int) ([]mode
 		productResponse := models.ProductResponse{
 			ProductID:         dp.ProductID,
 			ProductName:       dp.ProductName,
+			ProductNameEN:     dp.ProductNameEN,
 			Category:          dp.Category,
 			Description:       dp.Description,
+			DescriptionEN:     dp.DescriptionEN,
 			ProductMainImages: dp.ProductMainImages,
 			ProductImages:     dp.ProductImages,
 			Recommend:         dp.Recommend,

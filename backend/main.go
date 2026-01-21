@@ -1,13 +1,6 @@
 package main
 
 import (
-	routes "backend/app/api"
-	"backend/app/middlewares"
-	"backend/configs"
-	database "backend/external/db"
-
-	// redisconfig "backend/external/redis"
-	"backend/internal/pkgs/logs"
 	"fmt"
 	"log"
 	"net/http"
@@ -17,8 +10,14 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/redis/go-redis/v9"
-
 	"gorm.io/gorm"
+
+	routes "backend/app/api"
+	"backend/app/middlewares"
+	"backend/configs"
+	database "backend/external/db"
+	// redisconfig "backend/external/redis"
+	"backend/internal/pkgs/logs"
 )
 
 var (

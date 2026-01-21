@@ -9,13 +9,16 @@ import (
 type JobRecruitment struct {
 	JobRecruitmentID string         `gorm:"type:uniqueidentifier;primaryKey;default=NEWID()" json:"job_recruitment_id"`
 	Title            string         `json:"title"`
+	TitleEN          string         `json:"title_en"`
 	Department       string         `json:"department"`
 	Location         string         `json:"location"`
 	Type             string         `json:"type"`
 	Salary           string         `json:"salary"`
 	Hot              bool           `json:"hot"`
 	Description      string         `json:"description"`
+	DescriptionEN    string         `json:"description_en"`
 	Requirements     string         `gorm:"type:nvarchar(max)" json:"requirements"`
+	RequirementsEN   string         `gorm:"type:nvarchar(max)" json:"requirements_en"`
 	UsernameCreator  string         `json:"username_creator"`
 	CreatedAt        time.Time      `json:"created_at"`
 	UpdatedAt        time.Time      `json:"updated_at"`

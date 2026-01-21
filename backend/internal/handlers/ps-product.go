@@ -226,6 +226,7 @@ func (h *ProductHandler) CreateProductFormHandler(c *fiber.Ctx) error {
 
 func (h *ProductHandler) GetAllProductsHandler(c *fiber.Ctx) error {
 	limit := c.QueryInt("limit", 100)
+	lang := c.Query("lang", "th")
 
 	if limit <= 0 {
 		limit = 100
@@ -233,6 +234,11 @@ func (h *ProductHandler) GetAllProductsHandler(c *fiber.Ctx) error {
 
 	if limit > 100 {
 		limit = 100
+	}
+
+	// Validate language parameter
+	if lang != "en" && lang != "th" {
+		lang = "th"
 	}
 
 	if h.ProductSrv == nil {
@@ -249,9 +255,12 @@ func (h *ProductHandler) GetAllProductsHandler(c *fiber.Ctx) error {
 		})
 	}
 
+	// Process products based on language
+	processedProducts := processProductsByLanguage(products, lang)
+
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "Products retrieved successfully",
-		"data":    products,
+		"data":    processedProducts,
 	})
 }
 
@@ -497,6 +506,7 @@ func (h *ProductHandler) DeleteProductHandler(c *fiber.Ctx) error {
 
 func (h *ProductHandler) GetRecommendedProductsHandler(c *fiber.Ctx) error {
 	limit := c.QueryInt("limit", 100)
+	lang := c.Query("lang", "th")
 
 	if limit <= 0 {
 		limit = 100
@@ -504,6 +514,11 @@ func (h *ProductHandler) GetRecommendedProductsHandler(c *fiber.Ctx) error {
 
 	if limit > 100 {
 		limit = 100
+	}
+
+	// Validate language parameter
+	if lang != "en" && lang != "th" {
+		lang = "th"
 	}
 
 	if h.ProductSrv == nil {
@@ -528,9 +543,12 @@ func (h *ProductHandler) GetRecommendedProductsHandler(c *fiber.Ctx) error {
 		}
 	}
 
+	// Process products based on language
+	processedProducts := processProductsByLanguage(recommendedProducts, lang)
+
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "Recommended products retrieved successfully",
-		"data":    recommendedProducts,
+		"data":    processedProducts,
 	})
 }
 
@@ -601,4 +619,33 @@ func (h *ProductHandler) SearchProductsByNameHandler(c *fiber.Ctx) error {
 		"message": "Products retrieved successfully",
 		"data":    products,
 	})
+}
+
+// processProductsByLanguage processes products to use English or Thai names/descriptions
+func processProductsByLanguage(products []models.ProductResponse, lang string) []fiber.Map {
+	processedProducts := make([]fiber.Map, len(products))
+
+	for i, product := range products {
+		productMap := fiber.Map{
+			"product_id":          product.ProductID,
+			"product_name":        product.ProductName,
+			"category":            product.Category,
+			"description":         product.Description,
+			"product_main_images": product.ProductMainImages,
+			"product_images":      product.ProductImages,
+			"created_at":          product.CreatedAt,
+			"updated_at":          product.UpdatedAt,
+			"recommend":           product.Recommend,
+		}
+
+		// Replace with English content if lang is "en"
+		if lang == "en" {
+			productMap["product_name"] = product.ProductNameEN
+			productMap["description"] = product.DescriptionEN
+		}
+
+		processedProducts[i] = productMap
+	}
+
+	return processedProducts
 }

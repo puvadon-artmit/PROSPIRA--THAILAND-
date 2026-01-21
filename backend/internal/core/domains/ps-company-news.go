@@ -13,7 +13,9 @@ type CompanyNews struct {
 	CompanyNewsID    uuid.UUID `gorm:"type:uniqueidentifier;primaryKey;default:NEWID()" json:"company_news_id"`
 	CompanyNewsPhoto string    `json:"company_news_photo"`
 	Title            string    `json:"title"`
+	TitleEN          string    `json:"title_en"`
 	Content          string    `json:"content"`
+	ContentEN        string    `json:"content_en"`
 	Category         string    `json:"category"`
 	UsernameCreator  string    `json:"username_creator"`
 	CreatedAt        time.Time `json:"created_at"`

@@ -69,7 +69,9 @@ func (s *CompanyNewsService) GetCompanyNews(limit, offset int) (models.CompanyNe
 			CompanyNewsID:    job.CompanyNewsID,
 			CompanyNewsPhoto: job.CompanyNewsPhoto,
 			Title:            job.Title,
+			TitleEN:          job.TitleEN,
 			Content:          job.Content,
+			ContentEN:        job.ContentEN,
 			Category:         job.Category,
 			UsernameCreator:  job.UsernameCreator,
 			CreatedAt:        job.CreatedAt.Format("2006-01-02 15:04:05"),
@@ -103,7 +105,31 @@ func (s *CompanyNewsService) GetCompanyNewsByTitle(title string) (models.Company
 		CompanyNewsID:    job.CompanyNewsID,
 		CompanyNewsPhoto: job.CompanyNewsPhoto,
 		Title:            job.Title,
+		TitleEN:          job.TitleEN,
 		Content:          job.Content,
+		ContentEN:        job.ContentEN,
+		Category:         job.Category,
+		UsernameCreator:  job.UsernameCreator,
+		CreatedAt:        job.CreatedAt.Format("2006-01-02 15:04:05"),
+		UpdatedAt:        job.UpdatedAt.Format("2006-01-02 15:04:05"),
+	}
+
+	return jobReq, nil
+}
+
+func (s *CompanyNewsService) GetCompanyNewsByID(id string) (models.CompanyNewsReq, error) {
+	job, err := s.companyNewsRepo.GetCompanyNewsByID(id)
+	if err != nil {
+		return models.CompanyNewsReq{}, err
+	}
+
+	jobReq := models.CompanyNewsReq{
+		CompanyNewsID:    job.CompanyNewsID,
+		CompanyNewsPhoto: job.CompanyNewsPhoto,
+		Title:            job.Title,
+		TitleEN:          job.TitleEN,
+		Content:          job.Content,
+		ContentEN:        job.ContentEN,
 		Category:         job.Category,
 		UsernameCreator:  job.UsernameCreator,
 		CreatedAt:        job.CreatedAt.Format("2006-01-02 15:04:05"),
